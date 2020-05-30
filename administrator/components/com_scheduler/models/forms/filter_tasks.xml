@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+				name="search"
+				type="text"
+				hint="COM_MKV_FILTER_SELECT_MANAGER"
+				autocomplete="off"
+				class="js-stools-search-string"
+		/>
+		<field
+				name="manager"
+				type="Manager"
+				onchange="this.form.submit();"
+				>
+			<option value="">COM_MKV_FILTER_SELECT_MANAGER</option>
+		</field>
+		<field
+				name="status"
+				type="list"
+				onchange="this.form.submit();"
+				default=""
+		>
+			<option value="">COM_MKV_FILTER_SELECT_STATUS</option>
+			<option value="-2">COM_MKV_TASK_STATUS_-2</option>
+			<option value="1">COM_MKV_TASK_STATUS_1</option>
+			<option value="2">COM_MKV_TASK_STATUS_2</option>
+			<option value="3">COM_MKV_TASK_STATUS_3</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+				name="fullordering"
+				type="list"
+				onchange="this.form.submit();"
+				default="s.status, s.date_task ASC"
+		>
+			<option value="company ASC">COM_MKV_SORTING_COMPANY_ASC</option>
+			<option value="company DESC">COM_MKV_SORTING_COMPANY_DESC</option>
+			<option value="s.status, s.date_task ASC">COM_MKV_SORTING_STATUS_ASC</option>
+			<option value="s.status, s.date_task DESC">COM_MKV_SORTING_STATUS_DESC</option>
+			<option value="s.date_task ASC">COM_MKV_SORTING_DATE_ASC</option>
+			<option value="s.date_task DESC">COM_MKV_SORTING_DATE_DESC</option>
+			<option value="u.name ASC">COM_MKV_SORTING_EXECUTOR_ASC</option>
+			<option value="u.name DESC">COM_MKV_SORTING_EXECUTOR_DESC</option>
+			<option value="s.id ASC">COM_MKV_SORTING_ID_ASC</option>
+			<option value="s.id DESC">COM_MKV_SORTING_ID_DESC</option>
+		</field>
+		<field
+				name="limit"
+				type="limitbox"
+				class="input-mini"
+				default="0"
+				onchange="this.form.submit();"
+		/>
+	</fields>
+</form>
