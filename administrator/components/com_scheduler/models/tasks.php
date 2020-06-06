@@ -113,8 +113,10 @@ class SchedulerModelTasks extends ListModel
             if ($this->contractID > 0) $arr['tasks_link'] = $item->task;
             $url = JRoute::_("index.php?option=com_companies&amp;task=company.edit&amp;id={$item->companyID}&amp;return={$return}");
             $arr['company_link'] = JHtml::link($url, $item->company);
-            $url = JRoute::_("index.php?option={$this->option}&amp;task=task.edit&amp;id={$item->id}&amp;return={$return}");
-            $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_MKV_HEAD_OPEN'));
+            if (($item->managerID == JFactory::getUser()->id && SchedulerHelper::canDo('core.edit')) || SchedulerHelper::canDo('core.all')) {
+                $url = JRoute::_("index.php?option={$this->option}&amp;task=task.edit&amp;id={$item->id}&amp;return={$return}");
+                $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_MKV_HEAD_OPEN'));
+            }
             $result['items'][$item->status][] = $arr;
         }
         krsort($result['items'][3]);
