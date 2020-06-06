@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
 
 class SchedulerHelper
 {
@@ -20,5 +21,23 @@ class SchedulerHelper
     {
         $config = JComponentHelper::getParams("com_scheduler");
         return $config->get($param, $default);
+    }
+
+    public static function sendNotify(array $data): void
+    {
+        if (!isset($data['id']) || $data['id'] === null) {
+            $data['date_create'] = JFactory::getDate()->toSql();
+            $data['status'] = 0;
+            $data['id'] = null;
+        }
+        $db = JFactory::getDbo();
+        $columns = $db->qn(array_keys($data));
+        $values = implode(', ', $db->q(array_values($data)));
+        $query = $db->getQuery(true);
+        $query
+            ->insert("#__mkv_notifies")
+            ->columns($columns)
+            ->values($values);
+        $db->setQuery($query)->execute();
     }
 }
