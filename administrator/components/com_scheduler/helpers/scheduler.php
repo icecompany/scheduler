@@ -23,7 +23,7 @@ class SchedulerHelper
         return $config->get($param, $default);
     }
 
-    public static function sendNotify(array $data): void
+    public static function sendNotify(array $data, array $push = []): void
     {
         if (!isset($data['id']) || $data['id'] === null) {
             $data['date_create'] = JFactory::getDate()->toSql();
@@ -39,5 +39,22 @@ class SchedulerHelper
             ->columns($columns)
             ->values($values);
         $db->setQuery($query)->execute();
+        if (!empty($push)) {
+            $push['url'] = "https://{$_SERVER['HTTP_HOST']}/administrator/index.php?option=com_scheduler&task=notify.edit&id={$db->insertid()}";
+            self::sendPush($push);
+        }
+    }
+
+    public static function sendPush(array $push)
+    {
+        $push['type'] = 'broadcast';
+        curl_setopt_array($ch = curl_init(), array(
+            CURLOPT_URL => "https://pushall.ru/api.php",
+            CURLOPT_POSTFIELDS => $push,
+            CURLOPT_SAFE_UPLOAD => true,
+            CURLOPT_RETURNTRANSFER => true
+        ));
+        curl_exec($ch); //получить данные о рассылке
+        curl_close($ch);
     }
 }
