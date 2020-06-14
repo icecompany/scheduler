@@ -7,18 +7,8 @@ class SchedulerModelNotify extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        if ($item->id === null) {
-            $item->contractID = JFactory::getApplication()->getUserState($this->option.'.task.contractID');
-            $item->date_task = JDate::getInstance('now + 1 week')->toSql();
-        }
         $contract = $this->getContract($item->contractID);
-        if ($item->id === null) {
-            $item->managerID = $contract->managerID;
-            $item->title = JText::sprintf('COM_SCHEDULER_TITLE_TASK_ADD', $contract->company, $contract->project);
-        }
-        else {
-            $item->title = JText::sprintf('COM_SCHEDULER_TITLE_TASK_EDIT', $contract->company, $contract->project);
-        }
+        $item->title = JText::sprintf('COM_SCHEDULER_TITLE_NOTIFY_SHOW', $contract->company, $contract->project);
         return $item;
     }
 
