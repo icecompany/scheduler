@@ -18,6 +18,9 @@ class SchedulerViewTasks extends HtmlView
         $this->contractID = $this->get('ContractID');
 
         $this->filterForm->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_mkv/models/fields");
+        if (!SchedulerHelper::canDo('core.edit.all')) {
+            $this->filterForm->removeField('manager', 'filter');
+        }
 
         // Show the toolbar
         $this->toolbar();

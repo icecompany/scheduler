@@ -31,21 +31,8 @@
 	<fields name="list">
 		<field
 				name="fullordering"
-				type="list"
-				onchange="this.form.submit();"
-				default="s.status, s.date_task ASC"
-		>
-			<option value="company ASC">COM_MKV_SORTING_COMPANY_ASC</option>
-			<option value="company DESC">COM_MKV_SORTING_COMPANY_DESC</option>
-			<option value="s.status, s.date_task ASC">COM_MKV_SORTING_STATUS_ASC</option>
-			<option value="s.status, s.date_task DESC">COM_MKV_SORTING_STATUS_DESC</option>
-			<option value="s.date_task ASC">COM_MKV_SORTING_DATE_ASC</option>
-			<option value="s.date_task DESC">COM_MKV_SORTING_DATE_DESC</option>
-			<option value="u.name ASC">COM_MKV_SORTING_EXECUTOR_ASC</option>
-			<option value="u.name DESC">COM_MKV_SORTING_EXECUTOR_DESC</option>
-			<option value="s.id ASC">COM_MKV_SORTING_ID_ASC</option>
-			<option value="s.id DESC">COM_MKV_SORTING_ID_DESC</option>
-		</field>
+				type="hidden"
+		/>
 		<field
 				name="limit"
 				type="limitbox"

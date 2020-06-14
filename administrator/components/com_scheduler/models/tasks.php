@@ -84,6 +84,10 @@ class SchedulerModelTasks extends ListModel
             $query->where("s.contractID = {$this->_db->q($this->contractID)}");
             $limit = 0;
         }
+        if (!SchedulerHelper::canDo('core.edit.all')) {
+            $userID = JFactory::getUser()->id;
+            $query->where("s.managerID = {$this->_db->q($userID)}");
+        }
 
         $query->order($this->_db->escape($orderCol . ' ' . $orderDirn));
         $this->setState('list.limit', $limit);
