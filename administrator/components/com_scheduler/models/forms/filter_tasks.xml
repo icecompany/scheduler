@@ -4,7 +4,7 @@
 		<field
 				name="search"
 				type="text"
-				hint="COM_MKV_FILTER_SELECT_MANAGER"
+				hint="COM_MKV_HEAD_COMPANY"
 				autocomplete="off"
 				class="js-stools-search-string"
 		/>

@@ -17,6 +17,9 @@ class SchedulerControllerTask extends FormController {
             $contractID = $referer->getVar('contractID');
             $this->input->set('return', base64_encode($referer->getVar('return')));
         }
+        if ($referer->getVar('view') === 'tasks') {
+            $this->input->set('return', base64_encode($referer->toString()));
+        }
         if ($contractID > 0) JFactory::getApplication()->setUserState($this->option . '.task.contractID', $contractID);
         return parent::add();
     }
