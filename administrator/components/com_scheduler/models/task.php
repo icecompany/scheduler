@@ -9,7 +9,7 @@ class SchedulerModelTask extends AdminModel {
         $item = parent::getItem($pk);
         if ($item->id === null) {
             $item->contractID = JFactory::getApplication()->getUserState($this->option.'.task.contractID');
-            $item->date_task = JDate::getInstance('now + 1 week')->toSql();
+            $item->date_task = JDate::getInstance('now + 1 day')->toSql();
         }
         $contract = $this->getContract($item->contractID);
         if ($item->id === null) {
