@@ -39,6 +39,7 @@ class SchedulerModelTask extends AdminModel {
             if (!empty($data['result'])) {
                 $data['date_close'] = JDate::getInstance()->toSql();
                 $data['user_close'] = JFactory::getUser()->id;
+                $data['user_open'] = JFactory::getUser()->id;
                 $data['status'] = 3;
             }
             else {

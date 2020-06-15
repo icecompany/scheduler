@@ -21,6 +21,11 @@ class SchedulerControllerTask extends FormController {
         return parent::add();
     }
 
+    public function gotoContractActiveTask()
+    {
+
+    }
+
     public function display($cachable = false, $urlparams = array())
     {
         return parent::display($cachable, $urlparams);
