@@ -47,4 +47,27 @@ class SchedulerControllerTasks extends AdminController
         $this->redirect();
         jexit();
     }
+
+    public function plus_one_week()
+    {
+        $this->checkToken();
+        $cid = $this->input->get('cid', array(), 'array');
+        if (!is_array($cid) || count($cid) < 1)
+        {
+            \JLog::add(\JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), \JLog::WARNING, 'jerror');
+        }
+        else
+        {
+            $model = $this->getModel();
+            foreach ($cid as $id) {
+                $item = $model->getItem($id);
+                $date_task = JDate::getInstance($item->date_task . " + 1 week")->toSql();
+                $model->save(['id' => $item->id, 'date_task' => $date_task]);
+            }
+        }
+
+        $this->setRedirect($_SERVER['HTTP_REFERER']);
+        $this->redirect();
+        jexit();
+    }
 }

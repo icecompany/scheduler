@@ -53,6 +53,7 @@ class SchedulerViewTasks extends HtmlView
         {
             JToolbarHelper::deleteList('COM_SCHEDULER_CONFIRM_REMOVE_TASK', 'tasks.delete');
         }
+        JToolbarHelper::custom('tasks.plus_one_week', 'clock', 'clock', JText::sprintf('COM_SCHEDULER_BUTTON_PLUS_ONE_WEEK'));
         if (SchedulerHelper::canDo('core.admin'))
         {
             JToolBarHelper::preferences('com_scheduler');
