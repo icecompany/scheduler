@@ -23,7 +23,25 @@ class SchedulerControllerTask extends FormController {
 
     public function gotoContractActiveTask()
     {
-
+        $uri = JUri::getInstance();
+        $contractID = $uri->getVar('contractID', 0);
+        $return = $uri->getVar('return');
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("id")
+            ->from("#__mkv_scheduler")
+            ->where("status <> 3")
+            ->where("contractID = {$db->q($contractID)}");
+        $result = $db->setQuery($query)->loadResult();
+        if (!is_numeric($result)) {
+            $this->setRedirect(base64_decode($uri->getVar('return')));
+            $this->redirect();
+            jexit();
+        }
+        $this->setRedirect("index.php?option={$this->option}&task=task.edit&id={$result}&return={$return}");
+        $this->redirect();
+        jexit();
     }
 
     public function display($cachable = false, $urlparams = array())
