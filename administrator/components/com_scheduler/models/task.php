@@ -34,11 +34,13 @@ class SchedulerModelTask extends AdminModel {
                     $data['date_task'] = JDate::getInstance()->toSql();
                 }
             }
-            if (JDate::getInstance($data['date_task']) == JDate::getInstance()->setTime(0, 0, 0)) {
-                $data['status'] = 1;
-            }
-            if (JDate::getInstance($data['date_task']) > JDate::getInstance()->setTime(0, 0, 0)) {
-                $data['status'] = 2;
+            else {
+                if (JDate::getInstance($data['date_task']) == JDate::getInstance()->setTime(0, 0, 0)) {
+                    $data['status'] = 1;
+                }
+                if (JDate::getInstance($data['date_task']) > JDate::getInstance()->setTime(0, 0, 0)) {
+                    $data['status'] = 2;
+                }
             }
         }
         else {
