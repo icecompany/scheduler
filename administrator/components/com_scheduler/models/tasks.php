@@ -10,7 +10,7 @@ class SchedulerModelTasks extends ListModel
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 's.id',
-                's.date_task',
+                's.date_task', 'dat',
                 's.status, s.date_task',
                 'company',
                 'manager',
@@ -78,6 +78,13 @@ class SchedulerModelTasks extends ListModel
             $status = $this->getState('filter.status');
             if (is_numeric($status)) {
                 $query->where("s.status = {$this->_db->q($status)}");
+            }
+            $dat = $this->getState('filter.dat');
+            if (!empty($dat)) {
+                $dat = JDate::getInstance($dat)->format("Y-m-d");
+                if ($dat != '0000-00-00') {
+                    $query->where("s.date_task = {$this->_db->q($dat)}");
+                }
             }
         }
         else {
@@ -159,6 +166,8 @@ class SchedulerModelTasks extends ListModel
         $this->setState('filter.manager', $manager);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
+        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat');
+        $this->setState('filter.dat', $dat);
         parent::populateState($ordering, $direction);
         PrjHelper::check_refresh();
     }
@@ -168,6 +177,7 @@ class SchedulerModelTasks extends ListModel
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.dat');
         return parent::getStoreId($id);
     }
 
