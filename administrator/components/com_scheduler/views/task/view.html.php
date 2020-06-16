@@ -17,10 +17,8 @@ class SchedulerViewTask extends HtmlView {
     }
 
     protected function addToolbar() {
-        if ($this->item->status < 3) {
-            JToolBarHelper::apply('task.apply', 'JTOOLBAR_APPLY');
-            JToolbarHelper::save('task.save', 'JTOOLBAR_SAVE');
-        }
+        JToolBarHelper::apply('task.apply', 'JTOOLBAR_APPLY');
+        JToolbarHelper::save('task.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('task.cancel', 'JTOOLBAR_CLOSE');
         JFactory::getApplication()->input->set('hidemainmenu', true);
     }
