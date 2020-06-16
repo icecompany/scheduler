@@ -12,6 +12,17 @@ class SchedulerHelper
         PrjHelper::addActiveProjectFilter();
     }
 
+    public static function updateTaskManager(int $contractID, int $managerID): void
+    {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->update("#__mkv_scheduler")
+            ->set("managerID = {$managerID}")
+            ->where("contractID = {$contractID}");
+        $db->setQuery($query)->execute();
+    }
+
     public static function canDo(string $action): bool
     {
         return JFactory::getUser()->authorise($action, 'com_scheduler');
