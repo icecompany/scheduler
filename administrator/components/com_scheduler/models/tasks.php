@@ -113,7 +113,6 @@ class SchedulerModelTasks extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        if ($this->dat !== null) return ['cnt' => count($items)];
         $result = ['items' => [-2 => [], 1 => [], 2 => [], 3 => []]];
         $return = PrjHelper::getReturnUrl();
         foreach ($items as $item) {
@@ -139,6 +138,7 @@ class SchedulerModelTasks extends ListModel
             }
             $result['items'][$item->status][] = $arr;
         }
+        if ($this->dat !== null) return ['cnt' => (int) (count($result['items'][-2]) + count($result['items'][1]) + count($result['items'][2]))];
         krsort($result['items'][3]);
         return $result;
     }
