@@ -11,3 +11,14 @@ Joomla.submitbutton = function (task) {
         Joomla.submitform(task, form);
     }
 };
+
+function getActiveTaskCount() {
+    let dat = document.querySelector("#jform_date_task").value.split('.');
+    dat = dat[2] + '-' + dat[1] + '-' + dat[0];
+    let url = `index.php?option=com_scheduler&task=tasks.execute&date=${dat}&format=json`;
+    jQuery.getJSON(url, function (json) {
+        document.querySelector("#active-cnt-date").innerText = document.querySelector("#jform_date_task").value;
+        document.querySelector("#active-cnt-count").innerText = json.data.cnt;
+        document.querySelector(".active-cnt").style.display = 'block';
+    });
+}

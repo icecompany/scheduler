@@ -27,4 +27,15 @@ class SchedulerController extends BaseController
 	 * @since  1.0.0
 	 */
 	protected $default_view = 'tasks';
+
+	public function display($cachable = false, $urlparams = array())
+    {
+        $view = $this->input->getString('view');
+        if ($view === 'schedulers') {
+            $this->setRedirect("index.php?option=com_scheduler&view=tasks");
+            $this->redirect();
+            jexit();
+        }
+        return parent::display($cachable, $urlparams);
+    }
 }

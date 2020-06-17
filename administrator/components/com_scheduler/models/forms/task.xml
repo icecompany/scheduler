@@ -10,6 +10,7 @@
 				class="span12"
 				format="%d.%m.%Y"
 				required="true"
+				onchange="getActiveTaskCount()"
 		/>
 		<field
 				name="managerID"

@@ -22,7 +22,8 @@ class SchedulerModelTasks extends ListModel
         $input = JFactory::getApplication()->input;
         $this->export = ($input->getString('format', 'html') === 'html') ? false : true;
         $this->contractID = $config['contractID'] ?? $input->getInt('contractID', null);
-        if (!empty($config['contractID'])) $this->export = true;
+        $this->dat = $config['dat'] ?? null;
+        if (!empty($config['contractID']) || !empty($config['dat'])) $this->export = true;
     }
 
     protected function _getListQuery()
@@ -41,6 +42,7 @@ class SchedulerModelTasks extends ListModel
 
         //Ограничение длины списка
         $limit = (!$this->export) ? $this->getState('list.limit') : 0;
+        $userID = JFactory::getUser()->id;
 
         $query
             ->select("s.*")
@@ -58,7 +60,7 @@ class SchedulerModelTasks extends ListModel
         }
 
         $search = (!$this->export) ? $this->getState('filter.search') : JFactory::getApplication()->input->getString('search', '');
-        if ($this->contractID === null) {
+        if ($this->contractID === null && $this->dat === null) {
             if (!empty($search)) {
                 if (stripos($search, 'id:') !== false) { //Поиск по ID
                     $id = explode(':', $search);
@@ -88,11 +90,17 @@ class SchedulerModelTasks extends ListModel
             }
         }
         else {
-            $query->where("s.contractID = {$this->_db->q($this->contractID)}");
+            if ($this->contractID !== null) {
+                $query->where("s.contractID = {$this->_db->q($this->contractID)}");
+            }
+            if ($this->dat !== null) {
+                $query
+                    ->where("s.date_task = {$this->_db->q($this->dat)}")
+                    ->where("s.managerID = {$this->_db->q($userID)}");
+            }
             $limit = 0;
         }
         if (!SchedulerHelper::canDo('core.edit.all')) {
-            $userID = JFactory::getUser()->id;
             $query->where("s.managerID = {$this->_db->q($userID)}");
         }
 
@@ -105,6 +113,7 @@ class SchedulerModelTasks extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
+        if ($this->dat !== null) return ['cnt' => count($items)];
         $result = ['items' => [-2 => [], 1 => [], 2 => [], 3 => []]];
         $return = PrjHelper::getReturnUrl();
         foreach ($items as $item) {
@@ -181,5 +190,5 @@ class SchedulerModelTasks extends ListModel
         return parent::getStoreId($id);
     }
 
-    private $export, $contractID;
+    private $export, $contractID, $dat;
 }
