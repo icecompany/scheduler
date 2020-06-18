@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->item->contacts as $contact): ?>
+        <?php foreach ($this->contacts as $contact): ?>
             <tr>
                 <td><?php echo $contact['fio'];?></td>
                 <td><?php echo $contact['post'];?></td>

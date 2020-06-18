@@ -61,7 +61,7 @@ class SchedulerControllerTasks extends AdminController
             $model = $this->getModel();
             foreach ($cid as $id) {
                 $item = $model->getItem($id);
-                $date_task = JDate::getInstance($item->date_task . " + 1 week")->toSql();
+                $date_task = JDate::getInstance("now + 1 week")->toSql();
                 $model->save(['id' => $item->id, 'date_task' => $date_task]);
             }
         }

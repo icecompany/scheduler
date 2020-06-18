@@ -19,7 +19,6 @@ class SchedulerModelTask extends AdminModel {
         else {
             $item->title = JText::sprintf('COM_SCHEDULER_TITLE_TASK_EDIT', $contract->company, $contract->project);
         }
-        $item->contacts = $this->getContacts($contract->companyID);
         return $item;
     }
 
@@ -65,11 +64,14 @@ class SchedulerModelTask extends AdminModel {
         return parent::save($data);
     }
 
-    public function getContacts(int $companyID)
+    public function getContacts()
     {
+        $item = parent::getItem();
+        if ($item->id === null) return [];
+        $contract = $this->getContract($item->contractID);
         JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_companies/models", "CompaniesModel");
         JTable::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_companies/tables");
-        $model = JModelLegacy::getInstance("Contacts", "CompaniesModel", ['companyID' => $companyID]);
+        $model = JModelLegacy::getInstance("Contacts", "CompaniesModel", ['companyID' => $contract->companyID]);
         return $model->getItems();
     }
 

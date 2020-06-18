@@ -3,12 +3,13 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class SchedulerViewTask extends HtmlView {
-    protected $item, $form, $script;
+    protected $item, $form, $script, $contacts;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
         $this->script = $this->get('Script');
+        $this->contacts = $this->get('Contacts');
 
         $this->addToolbar();
         $this->setDocument();
