@@ -58,7 +58,10 @@ class SchedulerHelper
 
     public static function sendPush(array $push)
     {
-        $push['type'] = 'broadcast';
+        $type = 'broadcast';
+        if (in_array('uid', $push)) $type = 'unicast';
+        if (in_array('uids', $push)) $type = 'multicast';
+        $push['type'] = $type;
         curl_setopt_array($ch = curl_init(), array(
             CURLOPT_URL => "https://pushall.ru/api.php",
             CURLOPT_POSTFIELDS => $push,
