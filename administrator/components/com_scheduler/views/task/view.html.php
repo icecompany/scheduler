@@ -20,6 +20,7 @@ class SchedulerViewTask extends HtmlView {
     protected function addToolbar() {
         JToolBarHelper::apply('task.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('task.save', 'JTOOLBAR_SAVE');
+        JToolbarHelper::save2new('task.save2new');
         JToolbarHelper::cancel('task.cancel', 'JTOOLBAR_CLOSE');
         JFactory::getApplication()->input->set('hidemainmenu', true);
     }

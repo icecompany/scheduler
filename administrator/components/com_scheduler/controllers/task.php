@@ -24,6 +24,18 @@ class SchedulerControllerTask extends FormController {
         return parent::add();
     }
 
+    public function edit($key = null, $urlVar = null)
+    {
+        $uri = JUri::getInstance();
+        $id = $uri->getVar('id', 0);
+        if ($id > 0) {
+            $model = $this->getModel();
+            $item = $model->getItem($id);
+            JFactory::getApplication()->setUserState($this->option . '.task.contractID', $item->contractID);
+        }
+        return parent::edit($key, $urlVar);
+    }
+
     public function gotoContractActiveTask()
     {
         $uri = JUri::getInstance();
@@ -45,6 +57,11 @@ class SchedulerControllerTask extends FormController {
         $this->setRedirect("index.php?option={$this->option}&task=task.edit&id={$result}&return={$return}");
         $this->redirect();
         jexit();
+    }
+
+    public function getModel($name = 'Task', $prefix = 'SchedulerModel', $config = array('ignore_request' => true))
+    {
+        return parent::getModel($name, $prefix, $config);
     }
 
     public function display($cachable = false, $urlparams = array())

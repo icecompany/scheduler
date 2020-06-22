@@ -77,4 +77,10 @@ class SchedulerControllerTasks extends AdminController
         $this->redirect();
         jexit();
     }
+
+    public function __construct($config = array())
+    {
+        $this->registerTask('save2new', 'save');
+        parent::__construct($config);
+    }
 }
