@@ -24,6 +24,14 @@ class SchedulerModelTasks extends ListModel
         $this->contractID = $config['contractID'] ?? $input->getInt('contractID', null);
         $this->dat = $config['dat'] ?? null;
         if (!empty($config['contractID']) || !empty($config['dat'])) $this->export = true;
+        $this->heads = [
+            'status_clear' => 'COM_MKV_HEAD_STATUS',
+            'date_task' => 'COM_MKV_HEAD_DATE',
+            'manager' => 'COM_MKV_HEAD_EXECUTOR',
+            'company' => 'COM_MKV_HEAD_COMPANY',
+            'task' => 'COM_MKV_HEAD_TASK',
+            'result' => 'COM_MKV_HEAD_RESULT',
+        ];
     }
 
     protected function _getListQuery()
@@ -59,7 +67,7 @@ class SchedulerModelTasks extends ListModel
             $query->where("c.projectID = {$this->_db->q($project)}");
         }
 
-        $search = (!$this->export) ? $this->getState('filter.search') : JFactory::getApplication()->input->getString('search', '');
+        $search = $this->getState('filter.search');
         if ($this->contractID === null && $this->dat === null) {
             if (!empty($search)) {
                 if (stripos($search, 'id:') !== false) { //Поиск по ID
@@ -125,6 +133,7 @@ class SchedulerModelTasks extends ListModel
             $arr['date_close'] = (!empty($item->date_close)) ? JDate::getInstance($item->date_task)->format("d.m.Y") : '';
             $arr['manager'] = MkvHelper::getLastAndFirstNames($item->manager);
             $arr['status'] = "<span style='color: {$color}'>" . JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}") . "</span>";
+            $arr['status_clear'] = JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}");
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
             $url = JRoute::_("index.php?option={$this->option}&amp;view=tasks&amp;contractID={$item->contractID}");
@@ -142,6 +151,50 @@ class SchedulerModelTasks extends ListModel
         krsort($result['items'][3]);
         return $result;
     }
+
+    public function export()
+    {
+        $items = $this->getItems();
+        JLoader::discover('PHPExcel', JPATH_LIBRARIES);
+        JLoader::register('PHPExcel', JPATH_LIBRARIES . '/PHPExcel.php');
+
+        $xls = new PHPExcel();
+        $xls->setActiveSheetIndex(0);
+        $sheet = $xls->getActiveSheet();
+
+        //Ширина столбцов
+        $width = ["A" => 20, "B" => 13, "C" => 22, "D" => 80, "E" => 80, "F" => 80];
+        foreach ($width as $col => $value) $sheet->getColumnDimension($col)->setWidth($value);
+        //Заголовки
+        $j = 0;
+        foreach ($this->heads as $item => $head) $sheet->setCellValueByColumnAndRow($j++, 1, JText::sprintf($head));
+
+        $sheet->setTitle(JText::sprintf('COM_SCHEDULER_MENU_TASKS'));
+
+        //Данные
+        $row = 2; //Строка, с которой начнаются данные
+        $col = 0;
+        $arr = [-2, 1, 2, 3];
+        foreach ($arr as $status) {
+            foreach ($items['items'][$status] as $i => $item) {
+                foreach ($this->heads as $elem => $head) {
+                    $sheet->setCellValueByColumnAndRow($col++, $row, $item[$elem]);
+                }
+                $col = 0;
+                $row++;
+            }
+        }
+        header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: public");
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=Tasks.xls");
+        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $objWriter->save('php://output');
+        jexit();
+    }
+
 
     public function getTitle(): string
     {
@@ -190,5 +243,5 @@ class SchedulerModelTasks extends ListModel
         return parent::getStoreId($id);
     }
 
-    private $export, $contractID, $dat;
+    private $export, $contractID, $dat, $heads;
 }
