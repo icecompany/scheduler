@@ -17,6 +17,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_DATE', 's.date_task', $listDirn, $listOrder); ?>
     </th>
     <th>
+        <?php echo JText::sprintf('COM_MKV_HEAD_CONTRACT_STATUS'); ?>
+    </th>
+    <th>
         <?php echo JText::sprintf('COM_MKV_HEAD_OPEN'); ?>
     </th>
     <th>

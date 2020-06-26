@@ -19,6 +19,9 @@ foreach ($arr as $status):?>
                 <?php echo $item['date_task']; ?>
             </td>
             <td>
+                <?php echo $item['contract_link']; ?>
+            </td>
+            <td>
                 <?php echo $item['edit_link']; ?>
             </td>
             <td>

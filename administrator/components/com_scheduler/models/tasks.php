@@ -54,11 +54,13 @@ class SchedulerModelTasks extends ListModel
 
         $query
             ->select("s.*")
-            ->select("c.companyID")
+            ->select("c.companyID, ifnull(c.number_free, c.number) as contract_number, c.status as contract_status_code")
+            ->select("cs.title as contract_status")
             ->select("e.title as company")
             ->select("u.name as manager")
             ->from("#__mkv_scheduler s")
             ->leftJoin("#__mkv_contracts c on c.id = s.contractID")
+            ->leftJoin("#__mkv_contract_statuses cs on cs.code = c.status")
             ->leftJoin("#__mkv_companies e on e.id = c.companyID")
             ->leftJoin("#__users u on u.id = s.managerID");
 
@@ -134,6 +136,10 @@ class SchedulerModelTasks extends ListModel
             $arr['manager'] = MkvHelper::getLastAndFirstNames($item->manager);
             $arr['status'] = "<span style='color: {$color}'>" . JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}") . "</span>";
             $arr['status_clear'] = JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}");
+            $arr['contract_status'] = $item->contract_status ?? JText::sprintf("COM_MKV_STATUS_IN_PROJECT");
+            if ($item->contract_status_code == 1 && !empty($item->contract_number)) $arr['contract_status'] = JText::sprintf('COM_MKV_CONTRACT_TITLE_NUMBER', $item->contract_number);
+            $url = JRoute::_("index.php?option=com_contracts&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $arr['contract_link'] = JHtml::link($url, $arr['contract_status']);
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
             $url = JRoute::_("index.php?option={$this->option}&amp;view=tasks&amp;contractID={$item->contractID}");
