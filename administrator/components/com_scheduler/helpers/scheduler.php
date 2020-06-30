@@ -9,6 +9,7 @@ class SchedulerHelper
     public static function addSubmenu($vName)
     {
         HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_TASKS'), 'index.php?option=com_scheduler&view=tasks', $vName === 'tasks');
+        HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_NOTIFIES'), 'index.php?option=com_scheduler&view=notifies', $vName === 'notifies');
         PrjHelper::addActiveProjectFilter();
     }
 
