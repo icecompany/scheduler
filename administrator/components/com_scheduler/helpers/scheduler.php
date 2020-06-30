@@ -8,9 +8,21 @@ class SchedulerHelper
 {
     public static function addSubmenu($vName)
     {
+        PrjHelper::addNotifies();
         HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_TASKS'), 'index.php?option=com_scheduler&view=tasks', $vName === 'tasks');
-        HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_NOTIFIES'), 'index.php?option=com_scheduler&view=notifies', $vName === 'notifies');
         PrjHelper::addActiveProjectFilter();
+    }
+
+    public static function getNotifiesCount()
+    {
+        $db = JFactory::getDbo();
+        $userID = JFactory::getUser()->id;
+        $query = $db->getQuery(true);
+        $query
+            ->select("count(id)")
+            ->from("#__mkv_notifies")
+            ->where("status = 0 and managerID = {$db->q($userID)}");
+        return $db->setQuery($query)->loadResult() ?? 0;
     }
 
     public static function updateTaskManager(int $contractID, int $managerID): void
