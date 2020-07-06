@@ -110,7 +110,7 @@ class SchedulerModelTasks extends ListModel
             }
             $limit = 0;
         }
-        if (!SchedulerHelper::canDo('core.edit.all')) {
+        if (!SchedulerHelper::canDo('core.edit.all') && $this->contractID === null) {
             $query->where("s.managerID = {$this->_db->q($userID)}");
         }
 
