@@ -6,13 +6,6 @@ defined('_JEXEC') or die;
 
 class SchedulerControllerTasks extends AdminController
 {
-    public function download(): void
-    {
-        echo "<script>window.open('index.php?option=com_scheduler&task=tasks.execute&format=xls');</script>";
-        echo "<script>location.href='{$_SERVER['HTTP_REFERER']}'</script>";
-        jexit();
-    }
-
     public function getModel($name = 'Task', $prefix = 'SchedulerModel', $config = array())
     {
         return parent::getModel($name, $prefix, $config);
