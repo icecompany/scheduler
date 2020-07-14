@@ -17,7 +17,7 @@ class SchedulerViewNotify extends HtmlView {
     }
 
     protected function addToolbar() {
-        JToolbarHelper::cancel('notify.cancel', 'COM_SCHEDULER_BUTTON_READ_AND_GO_TO_CONTRACT');
+        JToolbarHelper::cancel('notify.cancel', ($this->item->contractID !== null) ? 'COM_SCHEDULER_BUTTON_READ_AND_GO_TO_CONTRACT' : 'COM_SCHEDULER_BUTTON_READ_AND_GO_TO_CONTRACTS');
         JFactory::getApplication()->input->set('hidemainmenu', true);
     }
 

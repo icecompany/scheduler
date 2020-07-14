@@ -7,8 +7,13 @@ class SchedulerModelNotify extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $contract = $this->getContract($item->contractID);
-        $item->title = JText::sprintf('COM_SCHEDULER_TITLE_NOTIFY_SHOW', $contract->company, $contract->project);
+        if ($item->contractID !== null) {
+            $contract = $this->getContract($item->contractID);
+            $item->title = JText::sprintf('COM_SCHEDULER_TITLE_NOTIFY_SHOW', $contract->company, $contract->project);
+        }
+        else {
+            $item->title = JText::sprintf('COM_SCHEDULER_TITLE_NOTIFY_SHOW_WITHOUT_CONTRACT');
+        }
         return $item;
     }
 
@@ -51,7 +56,7 @@ class SchedulerModelNotify extends AdminModel {
     {
         $all = get_class_vars($table);
         unset($all['_errors']);
-        $nulls = ['date_read', 'user_create']; //Поля, которые NULL
+        $nulls = ['date_read', 'user_create', 'contractID']; //Поля, которые NULL
         foreach ($all as $field => $v) {
             if (empty($field)) continue;
             if (in_array($field, $nulls)) {

@@ -15,7 +15,16 @@ class SchedulerControllerNotify extends FormController {
         $data['user_create'] = JFactory::getUser()->id;
         $data['status'] = 1;
         $table->save($data);
-        $app->redirect("index.php?option=com_contracts&task=contract.edit&id={$table->contractID}");
+        $query = [];
+        $query['option'] = 'com_contracts';
+        if ($table->contractID !== null) {
+            $query['task'] = 'contract.edit';
+            $query['id'] = $table->contractID;
+        }
+        else {
+            $query['view'] = 'contracts';
+        }
+        $app->redirect("index.php?" . http_build_query($query));
         jexit();
     }
 
