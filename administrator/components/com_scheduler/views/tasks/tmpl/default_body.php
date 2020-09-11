@@ -37,7 +37,7 @@ foreach ($arr as $status):?>
                 <?php echo $item['manager']; ?>
             </td>
             <td>
-                <?php echo $item['id']; ?>
+                <?php echo $item['date_close']; ?>
             </td>
         </tr>
     <?php endforeach; ?>

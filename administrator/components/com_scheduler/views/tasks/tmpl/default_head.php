@@ -14,7 +14,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_STATUS', 's.status, s.date_task', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_DATE', 's.date_task', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_SCHEDULER_HEAD_TASK_DATE_TASK', 's.date_task', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_MKV_HEAD_CONTRACT_STATUS'); ?>
@@ -35,6 +35,6 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_EXECUTOR', 'u.name', $listDirn, $listOrder); ?>
     </th>
     <th style="width: 1%;">
-        <?php echo JHtml::_('searchtools.sort', 'ID', 's.id', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_SCHEDULER_HEAD_TASK_DATE_CLOSE', 's.date_close', $listDirn, $listOrder); ?>
     </th>
 </tr>

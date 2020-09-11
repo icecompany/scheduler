@@ -10,12 +10,15 @@ class SchedulerModelTasks extends ListModel
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 's.id',
-                's.date_task', 'dat',
+                's.date_task',
+                's.date_close',
                 's.status, s.date_task',
                 'company',
                 'manager',
                 'status',
                 'search',
+                'date_1',
+                'date_2',
             );
         }
         parent::__construct($config);
@@ -31,6 +34,7 @@ class SchedulerModelTasks extends ListModel
             'company' => 'COM_MKV_HEAD_COMPANY',
             'task' => 'COM_MKV_HEAD_TASK',
             'result' => 'COM_MKV_HEAD_RESULT',
+            'date_close' => 'COM_SCHEDULER_HEAD_TASK_DATE_CLOSE',
         ];
     }
 
@@ -91,11 +95,19 @@ class SchedulerModelTasks extends ListModel
             if (is_numeric($status)) {
                 $query->where("s.status = {$this->_db->q($status)}");
             }
-            $dat = $this->getState('filter.dat');
-            if (!empty($dat)) {
-                $dat = JDate::getInstance($dat)->format("Y-m-d");
+            $date_1 = $this->getState('filter.date_1');
+            $date_2 = $this->getState('filter.date_2');
+            if (!empty($date_1) && empty($date_2)) {
+                $dat = JDate::getInstance($date_1)->format("Y-m-d");
                 if ($dat != '0000-00-00') {
                     $query->where("s.date_task = {$this->_db->q($dat)}");
+                }
+            }
+            if (!empty($date_1) && !empty($date_2)) {
+                $d1 = JDate::getInstance($date_1)->format("Y-m-d");
+                $d2 = JDate::getInstance($date_2)->format("Y-m-d");
+                if ($d1 != '0000-00-00' && $d2 != '0000-00-00') {
+                    $query->where("s.date_task BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
                 }
             }
         }
@@ -132,7 +144,7 @@ class SchedulerModelTasks extends ListModel
             $arr['company'] = $item->company;
             $arr['date_create'] = JDate::getInstance($item->date_create)->format("d.m.Y");
             $arr['date_task'] = JDate::getInstance($item->date_task)->format("d.m.Y");
-            $arr['date_close'] = (!empty($item->date_close)) ? JDate::getInstance($item->date_task)->format("d.m.Y") : '';
+            $arr['date_close'] = (!empty($item->date_close)) ? JDate::getInstance($item->date_close . "+3 hour")->format("d.m.Y H:i") : '';
             $arr['manager'] = MkvHelper::getLastAndFirstNames($item->manager);
             $arr['status'] = "<span style='color: {$color}'>" . JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}") . "</span>";
             $arr['status_clear'] = JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}");
@@ -147,7 +159,7 @@ class SchedulerModelTasks extends ListModel
             if ($this->contractID > 0) $arr['tasks_link'] = $item->task;
             $url = JRoute::_("index.php?option=com_companies&amp;task=company.edit&amp;id={$item->companyID}&amp;return={$return}");
             $arr['company_link'] = JHtml::link($url, $item->company);
-            if (($item->managerID == JFactory::getUser()->id && SchedulerHelper::canDo('core.edit')) || SchedulerHelper::canDo('core.all')) {
+            if (($item->managerID == JFactory::getUser()->id && SchedulerHelper::canDo('core.edit')) || SchedulerHelper::canDo('core.edit.all')) {
                 $url = JRoute::_("index.php?option={$this->option}&amp;task=task.edit&amp;id={$item->id}&amp;return={$return}");
                 $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_MKV_HEAD_OPEN'));
             }
@@ -169,7 +181,7 @@ class SchedulerModelTasks extends ListModel
         $sheet = $xls->getActiveSheet();
 
         //Ширина столбцов
-        $width = ["A" => 20, "B" => 13, "C" => 22, "D" => 80, "E" => 80, "F" => 80];
+        $width = ["A" => 20, "B" => 13, "C" => 22, "D" => 80, "E" => 80, "F" => 80, "H" => 18];
         foreach ($width as $col => $value) $sheet->getColumnDimension($col)->setWidth($value);
         //Заголовки
         $j = 0;
@@ -234,8 +246,10 @@ class SchedulerModelTasks extends ListModel
         $this->setState('filter.manager', $manager);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
-        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat');
-        $this->setState('filter.dat', $dat);
+        $date_1 = $this->getUserStateFromRequest($this->context . '.filter.date_1', 'filter_date_1');
+        $this->setState('filter.date_1', $date_1);
+        $date_2 = $this->getUserStateFromRequest($this->context . '.filter.date_2', 'filter_date_2');
+        $this->setState('filter.date_2', $date_2);
         parent::populateState($ordering, $direction);
         PrjHelper::check_refresh();
     }
@@ -245,7 +259,8 @@ class SchedulerModelTasks extends ListModel
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
-        $id .= ':' . $this->getState('filter.dat');
+        $id .= ':' . $this->getState('filter.date_1');
+        $id .= ':' . $this->getState('filter.date_2');
         return parent::getStoreId($id);
     }
 

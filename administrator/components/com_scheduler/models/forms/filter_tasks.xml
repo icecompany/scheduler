@@ -9,12 +9,20 @@
 				class="js-stools-search-string"
 		/>
 		<field
-				name="dat"
+				name="date_1"
 				type="calendar"
 				filter="none"
 				format="%d.%m.%Y"
 				onchange="this.form.submit();"
-				hint="COM_SCHEDULER_FILTER_SELECT_DATE"
+				hint="COM_SCHEDULER_FILTER_SELECT_DATE_1"
+		/>
+		<field
+				name="date_2"
+				type="calendar"
+				filter="none"
+				format="%d.%m.%Y"
+				onchange="this.form.submit();"
+				hint="COM_SCHEDULER_FILTER_SELECT_DATE_2"
 		/>
 		<field
 				name="manager"
