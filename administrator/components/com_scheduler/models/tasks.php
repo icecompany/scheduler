@@ -68,13 +68,12 @@ class SchedulerModelTasks extends ListModel
             ->leftJoin("#__mkv_companies e on e.id = c.companyID")
             ->leftJoin("#__users u on u.id = s.managerID");
 
-        $project = PrjHelper::getActiveProject();
-        if (is_numeric($project)) {
-            $query->where("c.projectID = {$this->_db->q($project)}");
-        }
-
         $search = $this->getState('filter.search');
         if ($this->contractID === null && $this->dat === null) {
+            $project = PrjHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $query->where("c.projectID = {$this->_db->q($project)}");
+            }
             if (!empty($search)) {
                 if (stripos($search, 'id:') !== false) { //Поиск по ID
                     $id = explode(':', $search);
