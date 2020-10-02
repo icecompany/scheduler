@@ -47,7 +47,7 @@ class SchedulerModelTasks extends ListModel
         $orderDirn = $this->state->get('list.direction');
         if ($orderCol == 's.status, s.date_task') {
             if ($orderDirn == 'ASC') $orderCol = 's.status asc, s.date_task';
-            if ($orderDirn == 'desc') {
+            if ($orderDirn == 'DESC') {
                 $orderCol = 's.status desc, s.date_task';
             }
         }

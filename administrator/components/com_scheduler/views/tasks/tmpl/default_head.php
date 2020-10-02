@@ -32,7 +32,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_MKV_HEAD_RESULT'); ?>
     </th>
     <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_EXECUTOR', 'u.name', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_EXECUTOR', 'manager', $listDirn, $listOrder); ?>
     </th>
     <th style="width: 1%;">
         <?php echo JHtml::_('searchtools.sort', 'COM_SCHEDULER_HEAD_TASK_DATE_CLOSE', 's.date_close', $listDirn, $listOrder); ?>
