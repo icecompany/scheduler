@@ -28,7 +28,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JText::sprintf('COM_MKV_HEAD_TASK'); ?>
     </th>
-    <th>
+    <th style="width: 20%;">
         <?php echo JText::sprintf('COM_MKV_HEAD_RESULT'); ?>
     </th>
     <th>

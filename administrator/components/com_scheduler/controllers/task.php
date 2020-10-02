@@ -59,6 +59,53 @@ class SchedulerControllerTask extends FormController {
         jexit();
     }
 
+    public function updateTask()
+    {
+        $app = JFactory::getApplication();
+        $uri = JUri::getInstance($_SERVER['HTTP_REFERER']);
+        $result = urldecode($app->input->getString('result'));
+        if (empty($result)) {
+            $type = 'error';
+            $msg = JText::sprintf('COM_SCHEDULER_ERROR_EMPTY_RESULT');
+        }
+        else {
+            $model = $this->getModel();
+            $taskID = $app->input->getInt('id', 0);
+            $item = $model->getItem($taskID);
+            if ($item->id == null) {
+                $type = 'error';
+                $msg = JText::sprintf('COM_SCHEDULER_ERROR_BAD_TASK_ID');
+            }
+            else {
+                if (!SchedulerHelper::canDo('core.edit.all') && $item->managerID != JFactory::getUser()->id) {
+                    $type = 'error';
+                    $msg = JText::sprintf('COM_SCHEDULER_ERROR_BAD_MANAGER_ID');
+                } else {
+                    if ((int)$item->status === 3) {
+                        $type = 'error';
+                        $msg = JText::sprintf('COM_SCHEDULER_ERROR_TASK_IS_CLOSED');
+                    }
+                    else {
+                        $arr = [];
+                        $arr['id'] = $taskID;
+                        $arr['result'] = $result;
+                        if (!$model->save($arr)) {
+                            $type = 'error';
+                            $msg = $model->getError();
+                        }
+                        else {
+                            $type = 'message';
+                            $msg = JText::sprintf('COM_SCHEDULER_MSG_RESULT_SAVE');
+                        }
+                    }
+                }
+            }
+        }
+        $app->enqueueMessage($msg, $type);
+        $app->redirect($uri);
+        jexit();
+    }
+
     public function getModel($name = 'Task', $prefix = 'SchedulerModel', $config = array('ignore_request' => true))
     {
         return parent::getModel($name, $prefix, $config);

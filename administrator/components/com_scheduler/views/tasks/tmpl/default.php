@@ -7,6 +7,7 @@ JHtml::_('searchtools.form');
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet', 'com_scheduler/style.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_scheduler/script.js', array('version' => 'auto', 'relative' => true));
 ?>
 <script>
     Joomla.submitbutton = function (task) {

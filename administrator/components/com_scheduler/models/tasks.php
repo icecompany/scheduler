@@ -153,6 +153,8 @@ class SchedulerModelTasks extends ListModel
             $arr['contract_link'] = JHtml::link($url, $arr['contract_status']);
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
+            //Поле для ввода результата
+            if ($item->status < 3 && (SchedulerHelper::canDo('core.edit.all') || $item->magagerID == JFactory::getUser()->id)) $arr['result'] = $this->getInputField($item->id);
             $url = JRoute::_("index.php?option={$this->option}&amp;view=tasks&amp;contractID={$item->contractID}");
             $arr['tasks_link'] = JHtml::link($url, $item->task);
             if ($this->contractID > 0) $arr['tasks_link'] = $item->task;
@@ -212,6 +214,18 @@ class SchedulerModelTasks extends ListModel
         jexit();
     }
 
+    private function getInputField(int $taskID): string
+    {
+        $hint = JText::sprintf('COM_SCHEDULER_TEXT_INPUT_RESULT_HERE');
+        return "<div class='clearfix'>" .
+                "<div class='js-stools-container-bar'>" .
+                "<div class='btn-wrapper input-append'>" .
+                "<input type='text' autocomplete='off' placeholder='{$hint}' id='task-{$taskID}' />" .
+                "<button class='btn btn-small button-publish' style='height: 28px' data-id='{$taskID}' onclick='updateTask({$taskID})'>OK</button>" .
+                "</div>" .
+                "</div>" .
+                "</div>";
+    }
 
     public function getTitle(): string
     {
