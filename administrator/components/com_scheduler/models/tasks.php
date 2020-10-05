@@ -154,7 +154,7 @@ class SchedulerModelTasks extends ListModel
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
             //Поле для ввода результата
-            if ($item->status < 3 && (SchedulerHelper::canDo('core.edit.all') || $item->magagerID == JFactory::getUser()->id)) $arr['result'] = $this->getInputField($item->id);
+            if (($item->status < 3 && (SchedulerHelper::canDo('core.edit.all') || $item->magagerID == JFactory::getUser()->id)) && !$this->export) $arr['result'] = $this->getInputField($item->id);
             $url = JRoute::_("index.php?option={$this->option}&amp;view=tasks&amp;contractID={$item->contractID}");
             $arr['tasks_link'] = JHtml::link($url, $item->task);
             if ($this->contractID > 0) $arr['tasks_link'] = $item->task;
