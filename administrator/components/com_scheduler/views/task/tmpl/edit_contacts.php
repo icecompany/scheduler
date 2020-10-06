@@ -9,6 +9,7 @@ defined('_JEXEC') or die;
             <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_CONTACTS_WORK_PHONE');?></th>
             <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_CONTACTS_MOBILE_PHONE');?></th>
             <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_CONTACTS_EMAIL');?></th>
+            <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_IS_MAIN_CONTACT');?></th>
             <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_CONTACTS_FOR_ACCREDITATION');?></th>
             <th><?php echo JText::sprintf('COM_COMPANIES_HEAD_CONTACTS_FOR_BUILDING');?></th>
             <th></th>
@@ -22,6 +23,7 @@ defined('_JEXEC') or die;
                 <td><?php echo $contact['phone_work'];?></td>
                 <td><?php echo $contact['phone_mobile'];?></td>
                 <td><?php echo $contact['email'];?></td>
+                <td><?php echo $contact['main'];?></td>
                 <td><?php echo $contact['for_accreditation'];?></td>
                 <td><?php echo $contact['for_building'];?></td>
                 <td><?php echo $contact['delete_link'];?></td>
