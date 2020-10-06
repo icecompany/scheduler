@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_scheduler/models/rules">
+	<fieldset name="general">
+		<field
+				name="title"
+				type="text"
+				label="COM_MKV_HEAD_TITLE"
+				description="COM_SCHEDULER_FORM_TEMPLATE_TITLE_DESC"
+				hint="COM_SCHEDULER_FORM_TEMPLATE_TITLE_HINT"
+				autocomplete="false"
+				class="span12"
+				required="true"
+		/>
+		<field
+				name="type"
+				type="list"
+				label="COM_SCHEDULER_FORM_TEMPLATE_TYPE_LABEL"
+				description="COM_SCHEDULER_FORM_TEMPLATE_TYPE_DESC"
+				class="span12"
+				required="true"
+				default="task"
+				>
+			<option value="task">COM_SCHEDULER_TEMPLATE_TYPE_TASK</option>
+			<option value="result">COM_SCHEDULER_TEMPLATE_TYPE_RESULT</option>
+		</field>
+		<field
+				name="text"
+				type="text"
+				label="COM_SCHEDULER_FORM_TEMPLATE_TEXT_LABEL"
+				description="COM_SCHEDULER_FORM_TEMPLATE_TEXT_DESC"
+				hint="COM_SCHEDULER_FORM_TEMPLATE_TEXT_HINT"
+				required="true"
+				autocomplete="false"
+				class="span12"
+				rows="5"
+		/>
+		<field
+				name="id"
+				type="hidden"
+		/>
+		<field
+				name="managerID"
+				type="hidden"
+		/>
+	</fieldset>
+</form>

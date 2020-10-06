@@ -10,6 +10,7 @@ class SchedulerHelper
     {
         PrjHelper::addNotifies();
         HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_TASKS'), 'index.php?option=com_scheduler&view=tasks', $vName === 'tasks');
+        HTMLHelper::_('sidebar.addEntry', JText::sprintf('COM_SCHEDULER_MENU_TEMPLATES'), 'index.php?option=com_scheduler&view=templates', $vName === 'templates');
         PrjHelper::addActiveProjectFilter();
     }
 

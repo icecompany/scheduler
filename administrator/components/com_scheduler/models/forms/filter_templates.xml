@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+				name="search"
+				type="text"
+				hint="COM_SCHEDULER_FILTER_TEMPLATES"
+				autocomplete="off"
+				class="js-stools-search-string"
+		/>
+	</fields>
+	<fields name="list">
+		<field
+				name="fullordering"
+				type="hidden"
+		/>
+		<field
+				name="limit"
+				type="limitbox"
+				class="input-mini"
+				default="0"
+				onchange="this.form.submit();"
+		/>
+	</fields>
+</form>
