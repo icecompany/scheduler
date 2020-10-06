@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
                 <td><?php echo $contact['post'];?></td>
                 <td><?php echo $contact['phone_work'];?></td>
                 <td><?php echo $contact['phone_mobile'];?></td>
-                <td><?php echo $contact['email'];?></td>
+                <td><?php echo $contact['email_link'];?></td>
                 <td><?php echo $contact['main'];?></td>
                 <td><?php echo $contact['for_accreditation'];?></td>
                 <td><?php echo $contact['for_building'];?></td>
