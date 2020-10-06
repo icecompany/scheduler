@@ -67,8 +67,7 @@ class SchedulerModelTask extends AdminModel {
     public function getContacts()
     {
         $item = parent::getItem();
-        if ($item->id === null) return [];
-        $contract = $this->getContract($item->contractID);
+        $contract = $this->getContract($item->contractID ?? JFactory::getApplication()->getUserState($this->option . ".task.contractID"));
         JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_companies/models", "CompaniesModel");
         JTable::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_companies/tables");
         $model = JModelLegacy::getInstance("Contacts", "CompaniesModel", ['companyID' => $contract->companyID]);
