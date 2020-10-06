@@ -18,10 +18,10 @@ HTMLHelper::_('script', 'com_scheduler/task.js', array('version' => 'auto', 'rel
             <div class="tab-content">
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_MKV_TITLE_TAB_GENERAL')); ?>
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span4">
                         <div><?php echo $this->loadTemplate('general'); ?></div>
                     </div>
-                    <div class="span6">
+                    <div class="span8">
                         <div><?php echo $this->loadTemplate('count'); ?></div>
                         <div><?php echo $this->loadTemplate('contacts'); ?></div>
                     </div>
