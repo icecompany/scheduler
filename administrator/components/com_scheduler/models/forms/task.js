@@ -22,3 +22,9 @@ function getActiveTaskCount() {
         document.querySelector(".active-cnt").style.display = 'block';
     });
 }
+
+function fromTemplate(tip) {
+    let field = document.getElementById("jform_template_"+tip);
+    document.querySelector("#jform_"+tip).value = field.options[field.selectedIndex].getAttribute('data-text');
+}
+

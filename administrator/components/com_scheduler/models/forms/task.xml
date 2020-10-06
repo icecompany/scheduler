@@ -20,6 +20,16 @@
 				class="span12"
 		/>
 		<field
+				name="template_task"
+				type="TemplateTask"
+				label="COM_SCHEDULER_FORM_TASK_TEMPLATE_TASK_LABEL"
+				description="COM_SCHEDULER_FORM_TASK_TEMPLATE_TASK_DESC"
+				onchange="fromTemplate('task')"
+				class="span12"
+		>
+				<option value="">COM_SCHEDULER_FORM_TASK_TEMPLATE_DEFAULT</option>
+		</field>
+		<field
 				name="task"
 				type="textarea"
 				label="COM_SCHEDULER_FORM_TASK_TASK_LABEL"
@@ -29,6 +39,16 @@
 				class="span12"
 				rows="5"
 		/>
+		<field
+				name="template_result"
+				type="TemplateResult"
+				label="COM_SCHEDULER_FORM_TASK_TEMPLATE_RESULT_LABEL"
+				description="COM_SCHEDULER_FORM_TASK_TEMPLATE_RESULT_DESC"
+				onchange="fromTemplate('result')"
+				class="span12"
+		>
+			<option value="">COM_SCHEDULER_FORM_TASK_TEMPLATE_DEFAULT</option>
+		</field>
 		<field
 				name="result"
 				type="textarea"

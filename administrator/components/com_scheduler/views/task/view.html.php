@@ -11,6 +11,10 @@ class SchedulerViewTask extends HtmlView {
         $this->script = $this->get('Script');
         $this->contacts = $this->get('Contacts');
 
+        if ($this->item->id !== null) {
+            $this->form->removeField('template_task');
+        }
+
         $this->addToolbar();
         $this->setDocument();
 
