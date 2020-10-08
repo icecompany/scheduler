@@ -13,7 +13,6 @@
 				type="calendar"
 				filter="none"
 				format="%d.%m.%Y"
-				onchange="this.form.submit();"
 				hint="COM_SCHEDULER_FILTER_SELECT_DATE_1"
 		/>
 		<field
@@ -21,7 +20,6 @@
 				type="calendar"
 				filter="none"
 				format="%d.%m.%Y"
-				onchange="this.form.submit();"
 				hint="COM_SCHEDULER_FILTER_SELECT_DATE_2"
 		/>
 		<field
@@ -43,6 +41,20 @@
 			<option value="2">COM_MKV_TASK_STATUS_2</option>
 			<option value="3">COM_MKV_TASK_STATUS_3</option>
 		</field>
+		<field
+				name="date_close_1"
+				type="calendar"
+				filter="none"
+				format="%d.%m.%Y"
+				hint="COM_SCHEDULER_FILTER_SELECT_DATE_CLOSE_1"
+		/>
+		<field
+				name="date_close_2"
+				type="calendar"
+				filter="none"
+				format="%d.%m.%Y"
+				hint="COM_SCHEDULER_FILTER_SELECT_DATE_CLOSE_2"
+		/>
 	</fields>
 	<fields name="list">
 		<field

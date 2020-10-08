@@ -17,8 +17,8 @@ class SchedulerModelTasks extends ListModel
                 'manager',
                 'status',
                 'search',
-                'date_1',
-                'date_2',
+                'date_1', 'date_close_1',
+                'date_2', 'date_close_2',
             );
         }
         parent::__construct($config);
@@ -94,6 +94,7 @@ class SchedulerModelTasks extends ListModel
             if (is_numeric($status)) {
                 $query->where("s.status = {$this->_db->q($status)}");
             }
+            //Фильтр по дате, на которую запланирована задача
             $date_1 = $this->getState('filter.date_1');
             $date_2 = $this->getState('filter.date_2');
             if (!empty($date_1) && empty($date_2)) {
@@ -107,6 +108,22 @@ class SchedulerModelTasks extends ListModel
                 $d2 = JDate::getInstance($date_2)->format("Y-m-d");
                 if ($d1 != '0000-00-00' && $d2 != '0000-00-00') {
                     $query->where("s.date_task BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
+                }
+            }
+            //Фильтр по дате, в которую выполнена задача
+            $date_close_1 = $this->getState('filter.date_close_1');
+            $date_close_2 = $this->getState('filter.date_close_2');
+            if (!empty($date_close_1) && empty($date_close_2)) {
+                $dat = JDate::getInstance($date_close_1)->format("Y-m-d");
+                if ($dat != '0000-00-00') {
+                    $query->where("s.date_close = {$this->_db->q($dat)}");
+                }
+            }
+            if (!empty($date_close_1) && !empty($date_close_2)) {
+                $d1 = JDate::getInstance($date_close_1)->format("Y-m-d");
+                $d2 = JDate::getInstance($date_close_2)->format("Y-m-d");
+                if ($d1 != '0000-00-00' && $d2 != '0000-00-00') {
+                    $query->where("s.date_close BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
                 }
             }
         }
@@ -263,6 +280,10 @@ class SchedulerModelTasks extends ListModel
         $this->setState('filter.date_1', $date_1);
         $date_2 = $this->getUserStateFromRequest($this->context . '.filter.date_2', 'filter_date_2');
         $this->setState('filter.date_2', $date_2);
+        $date_close_1 = $this->getUserStateFromRequest($this->context . '.filter.date_close_1', 'filter_date_close_1');
+        $this->setState('filter.date_close_1', $date_close_1);
+        $date_close_2 = $this->getUserStateFromRequest($this->context . '.filter.date_close_2', 'filter_date_close_2');
+        $this->setState('filter.date_close_2', $date_close_2);
         parent::populateState($ordering, $direction);
         PrjHelper::check_refresh();
     }
@@ -274,6 +295,8 @@ class SchedulerModelTasks extends ListModel
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.date_1');
         $id .= ':' . $this->getState('filter.date_2');
+        $id .= ':' . $this->getState('filter.date_close_1');
+        $id .= ':' . $this->getState('filter.date_close_2');
         return parent::getStoreId($id);
     }
 
