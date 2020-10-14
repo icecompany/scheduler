@@ -35,6 +35,7 @@ class SchedulerModelTasks extends ListModel
             'task' => 'COM_MKV_HEAD_TASK',
             'result' => 'COM_MKV_HEAD_RESULT',
             'date_close' => 'COM_SCHEDULER_HEAD_TASK_DATE_CLOSE',
+            'user_close' => 'COM_SCHEDULER_HEAD_USER_CLOSE',
         ];
     }
 
@@ -62,11 +63,13 @@ class SchedulerModelTasks extends ListModel
             ->select("cs.title as contract_status")
             ->select("e.title as company")
             ->select("u.name as manager")
+            ->select("u1.name as user_close")
             ->from("#__mkv_scheduler s")
             ->leftJoin("#__mkv_contracts c on c.id = s.contractID")
             ->leftJoin("#__mkv_contract_statuses cs on cs.code = c.status")
             ->leftJoin("#__mkv_companies e on e.id = c.companyID")
-            ->leftJoin("#__users u on u.id = s.managerID");
+            ->leftJoin("#__users u on u.id = s.managerID")
+            ->leftJoin("#__users u1 on u1.id = s.user_close");
 
         $search = $this->getState('filter.search');
         if ($this->contractID === null && $this->dat === null) {
@@ -162,6 +165,7 @@ class SchedulerModelTasks extends ListModel
             $arr['date_task'] = JDate::getInstance($item->date_task)->format("d.m.Y");
             $arr['date_close'] = (!empty($item->date_close)) ? JDate::getInstance($item->date_close . "+3 hour")->format("d.m.Y H:i") : '';
             $arr['manager'] = MkvHelper::getLastAndFirstNames($item->manager);
+            $arr['user_close'] = (!empty($item->user_close)) ? MkvHelper::getLastAndFirstNames($item->user_close) : '';
             $arr['status'] = "<span style='color: {$color}'>" . JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}") . "</span>";
             $arr['status_clear'] = JText::sprintf("COM_MKV_TASK_STATUS_{$item->status}");
             $arr['contract_status'] = $item->contract_status ?? JText::sprintf("COM_MKV_STATUS_IN_PROJECT");
@@ -171,7 +175,7 @@ class SchedulerModelTasks extends ListModel
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
             //Поле для ввода результата
-            if (($item->status < 3 && (SchedulerHelper::canDo('core.edit.all') || $item->magagerID == JFactory::getUser()->id)) && !$this->export) $arr['result'] = $this->getInputField($item->id);
+            if (($item->status != 3 && (SchedulerHelper::canDo('core.edit.all') || $item->magagerID == JFactory::getUser()->id)) && !$this->export) $arr['result'] = $this->getInputField($item->id);
             $url = JRoute::_("index.php?option={$this->option}&amp;view=tasks&amp;contractID={$item->contractID}");
             $arr['tasks_link'] = JHtml::link($url, $item->task);
             if ($this->contractID > 0) $arr['tasks_link'] = $item->task;

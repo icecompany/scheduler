@@ -33,7 +33,8 @@ class SchedulerHelper
         $query
             ->update("#__mkv_scheduler")
             ->set("managerID = {$managerID}")
-            ->where("contractID = {$contractID}");
+            ->where("contractID = {$contractID}")
+            ->where("`status` != 3");
         $db->setQuery($query)->execute();
     }
 
