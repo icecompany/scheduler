@@ -108,7 +108,7 @@ class SchedulerModelTasks extends ListModel
             }
             if (!empty($date_1) && !empty($date_2)) {
                 $d1 = JDate::getInstance($date_1)->format("Y-m-d");
-                $d2 = JDate::getInstance($date_2)->format("Y-m-d");
+                $d2 = JDate::getInstance($date_2 . ' + 1 day')->format("Y-m-d");
                 if ($d1 != '0000-00-00' && $d2 != '0000-00-00') {
                     $query->where("s.date_task BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
                 }
@@ -119,14 +119,15 @@ class SchedulerModelTasks extends ListModel
             if (!empty($date_close_1) && empty($date_close_2)) {
                 $dat = JDate::getInstance($date_close_1)->format("Y-m-d");
                 if ($dat != '0000-00-00') {
-                    $query->where("s.date_close = {$this->_db->q($dat)}");
+                    $query->where("s.date_close like {$this->_db->q($dat . '%')}");
                 }
             }
             if (!empty($date_close_1) && !empty($date_close_2)) {
                 $d1 = JDate::getInstance($date_close_1)->format("Y-m-d");
-                $d2 = JDate::getInstance($date_close_2)->format("Y-m-d");
+                $d2 = JDate::getInstance($date_close_2 . " +1 day")->format("Y-m-d");
                 if ($d1 != '0000-00-00' && $d2 != '0000-00-00') {
-                    $query->where("s.date_close BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
+                    if ($d1 != $d2) $query->where("s.date_close BETWEEN {$this->_db->q($d1)} and {$this->_db->q($d2)}");
+                    if ($d1 == $d2) $query->where("s.date_close like {$this->_db->q($d1 . '%')}");
                 }
             }
         }
