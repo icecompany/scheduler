@@ -10,6 +10,11 @@ use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', $this->script);
 HTMLHelper::_('script', 'com_scheduler/task.js', array('version' => 'auto', 'relative' => true));
 ?>
+<?php if ($this->version > 0): ?>
+    <div class="container-fluid alert alert-danger">
+        <h2><?php echo JText::sprintf('COM_MKV_HEAD_VERSION_FROM', JDate::getInstance($this->versionObject->dat)->format("d.m.Y H:i"));?></h2>
+    </div>
+<?php endif;?>
 <form action="<?php echo PrjHelper::getActionUrl(); ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
@@ -25,6 +30,13 @@ HTMLHelper::_('script', 'com_scheduler/task.js', array('version' => 'auto', 'rel
                         <div><?php echo $this->loadTemplate('meet'); ?></div>
                         <div><?php echo $this->loadTemplate('count'); ?></div>
                         <div><?php echo $this->loadTemplate('contacts'); ?></div>
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_MKV_LAYOUT_HISTORY')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div><?php echo $this->loadTemplate('history'); ?></div>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

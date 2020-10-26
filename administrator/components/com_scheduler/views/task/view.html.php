@@ -3,13 +3,16 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class SchedulerViewTask extends HtmlView {
-    protected $item, $form, $script, $contacts;
+    protected $item, $form, $script, $contacts, $history, $version, $versionObject;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
         $this->script = $this->get('Script');
         $this->contacts = $this->get('Contacts');
+        $this->history = $this->get('History');
+        $this->version = $this->get('Version');
+        $this->versionObject = $this->get('VersionObject');
 
         if ($this->item->id !== null) {
             $this->form->removeField('template_task');
@@ -29,9 +32,14 @@ class SchedulerViewTask extends HtmlView {
     }
 
     protected function addToolbar() {
-        JToolBarHelper::apply('task.apply', 'JTOOLBAR_APPLY');
-        JToolbarHelper::save('task.save', 'JTOOLBAR_SAVE');
-        JToolbarHelper::save2new('task.save2new');
+        if ($this->version === 0) {
+            JToolBarHelper::apply('task.apply', 'JTOOLBAR_APPLY');
+            JToolbarHelper::save('task.save', 'JTOOLBAR_SAVE');
+            JToolbarHelper::save2new('task.save2new');
+        }
+        else {
+            JToolbarHelper::custom('task.gotoActualVersion', 'back', 'back', JText::sprintf('COM_MKV_BUTTON_GOTO_ACTUAL_VERSION'), false);
+        }
         JToolbarHelper::cancel('task.cancel', 'JTOOLBAR_CLOSE');
         JFactory::getApplication()->input->set('hidemainmenu', true);
     }

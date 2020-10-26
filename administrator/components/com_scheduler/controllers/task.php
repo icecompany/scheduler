@@ -3,7 +3,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Controller\FormController;
 
 class SchedulerControllerTask extends FormController {
-
     public function add()
     {
         $uri = JUri::getInstance();
@@ -103,6 +102,15 @@ class SchedulerControllerTask extends FormController {
         }
         $app->enqueueMessage($msg, $type);
         $app->redirect($uri);
+        jexit();
+    }
+
+    public function gotoActualVersion()
+    {
+        $uri = JUri::getInstance();
+        $uri->delVar('version');
+        $this->setRedirect($uri->toString());
+        $this->redirect();
         jexit();
     }
 

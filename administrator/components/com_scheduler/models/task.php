@@ -3,6 +3,11 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 
 class SchedulerModelTask extends AdminModel {
+    public function __construct($config = array())
+    {
+        $this->version = JFactory::getApplication()->input->get('version', 0);
+        parent::__construct($config);
+    }
 
     public function getItem($pk = null)
     {
@@ -115,6 +120,15 @@ class SchedulerModelTask extends AdminModel {
         return $s;
     }
 
+    public function getHistory(): array
+    {
+        $item = parent::getItem();
+        if ($item->id === null) return [];
+        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_mkv/models", "MkvModel");
+        $model = JModelLegacy::getInstance("Events", "MkvModel", ['section' => 'task', 'itemID' => $item->id]);
+        return $model->getItems() ?? [];
+    }
+
     public function getContacts()
     {
         $item = parent::getItem();
@@ -142,6 +156,15 @@ class SchedulerModelTask extends AdminModel {
         $form->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_mkv/models/fields");
         $form->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_companies/models/fields");
 
+        if ($this->version > 0) {
+            $form->setFieldAttribute('date_task', 'readonly', true);
+            $form->setFieldAttribute('managerID', 'readonly', true);
+            $form->setFieldAttribute('template_task', 'readonly', true);
+            $form->setFieldAttribute('task', 'readonly', true);
+            $form->setFieldAttribute('template_result', 'readonly', true);
+            $form->setFieldAttribute('result', 'readonly', true);
+        }
+
         return $form;
     }
 
@@ -152,8 +175,24 @@ class SchedulerModelTask extends AdminModel {
         {
             $data = $this->getItem();
         }
+        if ($this->version > 0) {
+            $old = $this->getVersionObject();
+            $data = json_decode($old->new_data);
+        }
 
         return $data;
+    }
+
+    public function getVersion() {
+        return $this->version;
+    }
+
+    public function getVersionObject()
+    {
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_mkv/tables");
+        $table = JTable::getInstance("History", "TableMkv");
+        $table->load($this->version);
+        return $table;
     }
 
     protected function prepareTable($table)
@@ -240,4 +279,6 @@ class SchedulerModelTask extends AdminModel {
     {
         return 'administrator/components/' . $this->option . '/models/forms/task.js';
     }
+
+    private $version;
 }
