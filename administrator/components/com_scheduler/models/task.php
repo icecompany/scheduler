@@ -18,12 +18,33 @@ class SchedulerModelTask extends AdminModel {
         }
         else {
             $item->title = JText::sprintf('COM_SCHEDULER_TITLE_TASK_EDIT', $contract->company, $contract->project);
+            //Подгружаем встречу
+            $meeting = $this->loadMeeting($item->id);
+            if (!empty($meeting)) {
+                $item->taskID = $item->id;
+                $item->contactID = $meeting->contactID;
+                $item->place = $meeting->place;
+                $item->theme = $meeting->theme;
+                $item->type = 'meet';
+            }
         }
         return $item;
     }
 
     public function save($data)
     {
+        $app = JFactory::getApplication();
+        if ($data['type'] === 'meet') {
+            if (empty($data['theme'])) {
+                $app->enqueueMessage(JText::sprintf('COM_SCHEDULER_ERROR_EMPTY_THEME'), 'warning');
+                return false;
+            }
+            if (empty($data['place'])) {
+                $app->enqueueMessage(JText::sprintf('COM_SCHEDULER_ERROR_EMPTY_PLACE'), 'warning');
+                return false;
+            }
+        }
+
         $data['date_task'] = JDate::getInstance($data['date_task'])->format("Y-m-d");
         if ($data['id'] !== null) {
             if (!empty($data['result'])) {
@@ -79,6 +100,18 @@ class SchedulerModelTask extends AdminModel {
             $history = JTable::getInstance('History', 'TableMkv');
             $history->save($hst);
         }
+        //Сохраняем встречу
+        if ($s && $data['type'] === 'meet') {
+            $event = [];
+            $event['taskID'] = $data['id'] ?? JFactory::getDbo()->insertid();
+            $event['contactID'] = $data['contactID'];
+            $event['place'] = $data['place'];
+            $event['theme'] = $data['theme'];
+            if (!$this->saveMeeting($event)) {
+                $app->enqueueMessage(JText::sprintf('COM_SCHEDULER_ERROR_NOT_SAVE_EVENT'), 'error');
+                return false;
+            }
+        }
         return $s;
     }
 
@@ -106,7 +139,8 @@ class SchedulerModelTask extends AdminModel {
         {
             return false;
         }
-        $form->addFieldPath(JPATH_ADMINISTRATOR."/components/com_mkv/models/fields");
+        $form->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_mkv/models/fields");
+        $form->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_companies/models/fields");
 
         return $form;
     }
@@ -139,6 +173,22 @@ class SchedulerModelTask extends AdminModel {
         }
 
         parent::prepareTable($table);
+    }
+
+    private function saveMeeting(array $data): bool
+    {
+        $table = JTable::getInstance('Meetings', 'TableScheduler', []);
+        $table->load(['taskID' => $data['taskID']]);
+        $data['id'] = $table->id;
+        return $table->save($data);
+    }
+
+    private function loadMeeting(int $taskID)
+    {
+        if ($taskID < 1) return [];
+        $table = JTable::getInstance('Meetings', 'TableScheduler', []);
+        $table->load(['taskID' => $taskID]);
+        return $table;
     }
 
     private function getContract(int $contractID)

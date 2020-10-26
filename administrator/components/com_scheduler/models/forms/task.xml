@@ -67,4 +67,50 @@
 				type="hidden"
 		/>
 	</fieldset>
+	<fieldset name="meet">
+		<field
+				name="type"
+				type="list"
+				label="COM_SCHEDULER_FORM_TYPE_LABEL"
+				description="COM_SCHEDULER_FORM_TYPE_DESC"
+				class="span12"
+				onchange="switchType(this.value);"
+				default="task"
+		>
+			<option value="task">COM_SCHEDULER_FORM_TYPE_TASK</option>
+			<option value="meet">COM_SCHEDULER_FORM_TYPE_MEET</option>
+		</field>
+		<field
+				name="contactID"
+				type="Contact"
+				label="COM_SCHEDULER_FORM_CONTACT_LABEL"
+				description="COM_SCHEDULER_FORM_CONTACT_DESC"
+				readonly="true"
+				class="span12"
+		/>
+		<field
+				name="theme"
+				type="textarea"
+				label="COM_SCHEDULER_FORM_THEME_LABEL"
+				description="COM_SCHEDULER_FORM_THEME_DESC"
+				hint="COM_SCHEDULER_FORM_THEME_HINT"
+				readonly="true"
+				class="span12"
+				autocomplete="false"
+		/>
+		<field
+				name="place"
+				type="text"
+				label="COM_SCHEDULER_FORM_PLACE_LABEL"
+				description="COM_SCHEDULER_FORM_PLACE_DESC"
+				hint="COM_SCHEDULER_FORM_PLACE_HINT"
+				readonly="true"
+				class="span12"
+				autocomplete="false"
+		/>
+		<field
+				name="taskID"
+				type="hidden"
+		/>
+	</fieldset>
 </form>

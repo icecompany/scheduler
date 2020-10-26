@@ -22,6 +22,7 @@ HTMLHelper::_('script', 'com_scheduler/task.js', array('version' => 'auto', 'rel
                         <div><?php echo $this->loadTemplate('general'); ?></div>
                     </div>
                     <div class="span8">
+                        <div><?php echo $this->loadTemplate('meet'); ?></div>
                         <div><?php echo $this->loadTemplate('count'); ?></div>
                         <div><?php echo $this->loadTemplate('contacts'); ?></div>
                     </div>

@@ -12,6 +12,30 @@ Joomla.submitbutton = function (task) {
     }
 };
 
+function switchType(val) {
+    let theme = document.querySelector('#jform_theme');
+    let place = document.querySelector('#jform_place');
+    let contactID = document.querySelector('#jform_contactID');
+    let state = true;
+    switch (val) {
+        case 'task': {
+            state = true;
+            contactID.setAttribute('disabled', true);
+            jQuery(contactID).trigger("liszt:updated");
+            break;
+        }
+        case 'meet': {
+            state = false;
+            contactID.removeAttribute('disabled');
+            jQuery(contactID).trigger("liszt:updated");
+            break;
+        }
+    }
+    theme.readOnly = state;
+    place.readOnly = state;
+    contactID.readOnly = state;
+}
+
 function getActiveTaskCount() {
     let dat = document.querySelector("#jform_date_task").value.split('.');
     dat = dat[2] + '-' + dat[1] + '-' + dat[0];
