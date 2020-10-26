@@ -14,8 +14,8 @@ class SchedulerViewTask extends HtmlView {
         if ($this->item->id !== null) {
             $this->form->removeField('template_task');
             //Снимаем атрибут только для чтения для встречи
+            $this->form->setFieldAttribute('type', 'readonly', true);
             if ($this->item->type === 'meet') {
-                $this->form->setFieldAttribute('type', 'readonly', true);
                 $this->form->setFieldAttribute('contactID', 'readonly', false);
                 $this->form->setFieldAttribute('theme', 'readonly', false);
                 $this->form->setFieldAttribute('place', 'readonly', false);
