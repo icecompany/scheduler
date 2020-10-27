@@ -21,19 +21,19 @@ function switchType(val) {
         case 'task': {
             state = true;
             contactID.setAttribute('disabled', true);
-            jQuery(contactID).trigger("liszt:updated");
             break;
         }
         case 'meet': {
             state = false;
             contactID.removeAttribute('disabled');
-            jQuery(contactID).trigger("liszt:updated");
+            contactID.name = 'jform[contactID]';
             break;
         }
     }
     theme.readOnly = state;
     place.readOnly = state;
     contactID.readOnly = state;
+    jQuery(contactID).trigger("liszt:updated");
 }
 
 function getActiveTaskCount() {
@@ -51,4 +51,3 @@ function fromTemplate(tip) {
     let field = document.getElementById("jform_template_"+tip);
     document.querySelector("#jform_"+tip).value = field.options[field.selectedIndex].getAttribute('data-text');
 }
-

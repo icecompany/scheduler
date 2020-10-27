@@ -85,7 +85,6 @@
 				type="Contact"
 				label="COM_SCHEDULER_FORM_CONTACT_LABEL"
 				description="COM_SCHEDULER_FORM_CONTACT_DESC"
-				readonly="true"
 				class="span12"
 		/>
 		<field

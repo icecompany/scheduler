@@ -88,6 +88,18 @@ class SchedulerModelTask extends AdminModel {
             }
         }
         $s = parent::save($data);
+        //Сохраняем встречу
+        if ($s && $data['type'] === 'meet') {
+            $event = [];
+            $event['taskID'] = $data['id'] ?? JFactory::getDbo()->insertid();
+            $event['contactID'] = $data['contactID'];
+            $event['place'] = $data['place'];
+            $event['theme'] = $data['theme'];
+            if (!$this->saveMeeting($event)) {
+                $app->enqueueMessage(JText::sprintf('COM_SCHEDULER_ERROR_NOT_SAVE_EVENT'), 'error');
+                return false;
+            }
+        }
         //Пишем в историю
         if ($s) {
             $hst = [];
@@ -104,18 +116,6 @@ class SchedulerModelTask extends AdminModel {
             JTable::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_mkv/tables");
             $history = JTable::getInstance('History', 'TableMkv');
             $history->save($hst);
-        }
-        //Сохраняем встречу
-        if ($s && $data['type'] === 'meet') {
-            $event = [];
-            $event['taskID'] = $data['id'] ?? JFactory::getDbo()->insertid();
-            $event['contactID'] = $data['contactID'];
-            $event['place'] = $data['place'];
-            $event['theme'] = $data['theme'];
-            if (!$this->saveMeeting($event)) {
-                $app->enqueueMessage(JText::sprintf('COM_SCHEDULER_ERROR_NOT_SAVE_EVENT'), 'error');
-                return false;
-            }
         }
         return $s;
     }

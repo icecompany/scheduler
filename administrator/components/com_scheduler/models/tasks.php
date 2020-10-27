@@ -16,6 +16,7 @@ class SchedulerModelTasks extends ListModel
                 'company',
                 'manager',
                 'status',
+                'type',
                 'search',
                 'date_1', 'date_close_1',
                 'date_2', 'date_close_2',
@@ -87,6 +88,16 @@ class SchedulerModelTasks extends ListModel
                 } else {
                     $text = $this->_db->q("%{$search}%");
                     $query->where("(e.title like {$text})");
+                }
+            }
+            $type = $this->getState('filter.type');
+            if (!empty($type)) {
+                $query->leftJoin("#__mkv_meetings m on m.taskID = s.id");
+                if ($type === 'meet') {
+                    $query->where("m.id is not null");
+                }
+                if ($type === 'task') {
+                    $query->where("m.id is null");
                 }
             }
             $manager = $this->getState('filter.manager');
@@ -289,6 +300,8 @@ class SchedulerModelTasks extends ListModel
         $this->setState('filter.date_close_1', $date_close_1);
         $date_close_2 = $this->getUserStateFromRequest($this->context . '.filter.date_close_2', 'filter_date_close_2');
         $this->setState('filter.date_close_2', $date_close_2);
+        $type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type');
+        $this->setState('filter.type', $type);
         parent::populateState($ordering, $direction);
         PrjHelper::check_refresh();
     }
@@ -302,6 +315,7 @@ class SchedulerModelTasks extends ListModel
         $id .= ':' . $this->getState('filter.date_2');
         $id .= ':' . $this->getState('filter.date_close_1');
         $id .= ':' . $this->getState('filter.date_close_2');
+        $id .= ':' . $this->getState('filter.type');
         return parent::getStoreId($id);
     }
 

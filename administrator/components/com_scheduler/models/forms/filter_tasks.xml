@@ -55,6 +55,15 @@
 				format="%d.%m.%Y"
 				hint="COM_SCHEDULER_FILTER_SELECT_DATE_CLOSE_2"
 		/>
+		<field
+				name="type"
+				type="list"
+				onchange="this.form.submit();"
+				>
+			<option value="">COM_SCHEDULER_FILTER_SELECT_TYPE</option>
+			<option value="task">COM_SCHEDULER_FORM_TYPE_TASK</option>
+			<option value="meet">COM_SCHEDULER_FORM_TYPE_MEET</option>
+		</field>
 	</fields>
 	<fields name="list">
 		<field
