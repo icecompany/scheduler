@@ -11,5 +11,6 @@
 		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
 		<action name="core.edit.value" title="JACTION_EDITVALUE" description="JACTION_EDITVALUE_COMPONENT_DESC" />
 		<action name="core.edit.all" title="COM_SCHEDULER_ACCESS_EDIT_ALL_LABEL" description="COM_SCHEDULER_ACCESS_EDIT_ALL_DESC" />
+		<action name="core.access.plus_one_week" title="COM_SCHEDULER_ACCESS_PLUS_ONE_WEEK_LABEL" description="COM_SCHEDULER_ACCESS_PLUS_ONE_WEEK_DESC" />
 	</section>
 </access>

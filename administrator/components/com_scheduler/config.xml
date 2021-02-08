@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+	<fieldset name="configuration" label="COM_SCHEDULER_SETTINGS_LABEL" description="COM_SCHEDULER_SETTINGS_DESC">
+		<field name="plus_one_week_enabled"
+			   type="radio"
+			   label="COM_SCHEDULER_SETTINGS_PLUS_ONE_WEEK_ENABLED_LABEL"
+			   description="COM_SCHEDULER_SETTINGS_PLUS_ONE_WEEK_ENABLED_DESC"
+			   default="0"
+			   class="btn-group btn-group-yesno"
+			   component="com_scheduler"
+			   section="component">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules"
 			   type="rules"
