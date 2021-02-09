@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 class SchedulerViewTasks extends HtmlView
 {
     protected $sidebar = '';
-    public $items, $pagination, $uid, $state, $filterForm, $activeFilters, $contractID;
+    public $items, $pagination, $uid, $state, $filterForm, $activeFilters, $contractID, $colspan;
 
     public function display($tpl = null)
     {
@@ -16,6 +16,7 @@ class SchedulerViewTasks extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
         $this->contractID = $this->get('ContractID');
+        $this->colspan = $this->get('ColspanValue');
 
         $this->filterForm->addFieldPath(JPATH_ADMINISTRATOR . "/components/com_mkv/models/fields");
         if (!SchedulerHelper::canDo('core.edit.all')) {

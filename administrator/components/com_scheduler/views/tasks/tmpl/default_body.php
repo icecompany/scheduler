@@ -24,6 +24,11 @@ foreach ($arr as $status):?>
             <td>
                 <?php echo $item['edit_link']; ?>
             </td>
+            <?php if (!is_numeric(PrjHelper::getActiveProject())): ?>
+                <td>
+                    <?php echo $item['project']; ?>
+                </td>
+            <?php endif;?>
             <td>
                 <?php echo $item['company_link']; ?>
             </td>

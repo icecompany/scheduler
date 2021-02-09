@@ -141,6 +141,11 @@ class SchedulerModelTasks extends ListModel
                     if ($d1 == $d2) $query->where("s.date_close like {$this->_db->q($d1 . '%')}");
                 }
             }
+            if (!is_numeric($project)) {
+                $query
+                    ->select("p.title as project")
+                    ->leftJoin("#__mkv_projects p on p.id = c.projectID");
+            }
         }
         else {
             if ($this->contractID !== null) {
@@ -173,6 +178,7 @@ class SchedulerModelTasks extends ListModel
             $arr['id'] = $item->id;
             $color = MkvHelper::getTaskColor($item->status);
             $arr['company'] = $item->company;
+            $arr['project'] = $item->project;
             $arr['date_create'] = JDate::getInstance($item->date_create)->format("d.m.Y");
             $arr['date_task'] = JDate::getInstance($item->date_task)->format("d.m.Y");
             $arr['date_close'] = (!empty($item->date_close)) ? JDate::getInstance($item->date_close . "+3 hour")->format("d.m.Y H:i") : '';
@@ -269,6 +275,12 @@ class SchedulerModelTasks extends ListModel
         else {
             return JText::sprintf('COM_SCHEDULER_TITLE_TASKS');
         }
+    }
+
+    public function getColspanValue()
+    {
+        $prj = PrjHelper::getActiveProject();
+        return (!is_numeric($prj)) ? 12 : 11;
     }
 
     public function getContractID()

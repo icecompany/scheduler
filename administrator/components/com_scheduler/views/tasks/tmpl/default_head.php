@@ -22,6 +22,11 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JText::sprintf('COM_MKV_HEAD_OPEN'); ?>
     </th>
+    <?php if (!is_numeric(PrjHelper::getActiveProject())): ?>
+        <th>
+            <?php echo JText::sprintf('COM_MKV_HEAD_PROJECT'); ?>
+        </th>
+    <?php endif;?>
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_MKV_HEAD_COMPANY', 'company', $listDirn, $listOrder); ?>
     </th>
