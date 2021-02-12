@@ -44,6 +44,7 @@ class SchedulerViewNotifies extends HtmlView
             JToolbarHelper::custom('notifies.reset', 'back', 'back', JText::sprintf('COM_SCHEDULER_BUTTON_RESET_NOTIFY'), false);
         }
         JToolbarHelper::custom('notifies.read', 'flag', 'flag', JText::sprintf('COM_SCHEDULER_BUTTON_READ'));
+        JToolbarHelper::custom('notifies.download', 'download', 'download', JText::sprintf('COM_MKV_BUTTON_EXPORT_TO_EXCEL'), false);
         if (SchedulerHelper::canDo('core.admin'))
         {
             JToolBarHelper::preferences('com_scheduler');
