@@ -206,6 +206,8 @@ class SchedulerModelTasks extends ListModel
             $result['items'][$item->status][] = $arr;
         }
         if ($this->dat !== null) return ['cnt' => (int) (count($result['items'][-2]) + count($result['items'][1]) + count($result['items'][2]))];
+        $orderCol = $this->state->get('list.ordering');
+        if ($orderCol != 's.date_close') krsort($result['items'][3]);
         return $result;
     }
 
