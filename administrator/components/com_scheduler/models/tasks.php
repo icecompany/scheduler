@@ -206,7 +206,6 @@ class SchedulerModelTasks extends ListModel
             $result['items'][$item->status][] = $arr;
         }
         if ($this->dat !== null) return ['cnt' => (int) (count($result['items'][-2]) + count($result['items'][1]) + count($result['items'][2]))];
-        krsort($result['items'][3]);
         return $result;
     }
 
@@ -300,9 +299,9 @@ class SchedulerModelTasks extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string', true);
         $this->setState('filter.manager', $manager);
-        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string', true);
         $this->setState('filter.status', $status);
         $date_1 = $this->getUserStateFromRequest($this->context . '.filter.date_1', 'filter_date_1');
         $this->setState('filter.date_1', $date_1);
