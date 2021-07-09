@@ -12,6 +12,24 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="notify_new_task_date_enabled"
+			   type="radio"
+			   label="COM_SCHEDULER_SETTINGS_NOTIFY_NEW_TASK_DATE_ENABLED_LABEL"
+			   description="COM_SCHEDULER_SETTINGS_NOTIFY_NEW_TASK_DATE_ENABLED_DESC"
+			   default="0"
+			   class="btn-group btn-group-yesno"
+			   component="com_scheduler"
+			   section="component">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="notify_new_task_date_user_group"
+			   type="usergroup"
+			   label="COM_SCHEDULER_SETTINGS_NOTIFY_NEW_TASK_DATE_USER_GROUP_LABEL"
+			   description="COM_SCHEDULER_SETTINGS_NOTIFY_NEW_TASK_DATE_USER_GROUP_DESC"
+			   component="com_scheduler"
+			   section="component"
+		/>
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules"

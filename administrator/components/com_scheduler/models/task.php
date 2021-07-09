@@ -52,7 +52,7 @@ class SchedulerModelTask extends AdminModel {
 
         $data['date_task'] = JDate::getInstance($data['date_task'])->format("Y-m-d");
         if ($data['id'] !== null) {
-            $item = parent::getItem();
+            $item = parent::getItem($data['id']);
             if (!empty($data['result'])) {
                 $data['date_close'] = JDate::getInstance()->toSql();
                 $data['user_close'] = JFactory::getUser()->id;
@@ -117,6 +117,12 @@ class SchedulerModelTask extends AdminModel {
             $history = JTable::getInstance('History', 'TableMkv');
             $history->save($hst);
         }
+
+        //Уведомление в случае переноса задачи на более позднюю дату
+        if (!empty($item) && !empty($data) && $this->isNeedNotify($item, $data)) {
+            $this->sendNewTaskDate($data ?? [], $item->date_task);
+        }
+
         return $s;
     }
 
@@ -212,6 +218,75 @@ class SchedulerModelTask extends AdminModel {
         }
 
         parent::prepareTable($table);
+    }
+
+    private function sendNewTaskDate(array $data, $date_old): void
+    {
+        if (!$this->isNotifyTaskDateEnabled()) return;
+
+        if (empty($users = $this->getNotifyUserGroup())) return;
+
+        jimport('joomla.mail.helper');
+        foreach ($users as $userID) {
+            $user = JFactory::getUser($userID);
+            $mailer = MkvHelper::getMailer();
+            $mailer->addRecipient($user->email, $user->name);
+            $mailer->setSubject(JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TITLE'));
+            $mailer->setBody($this->getNewTaskNotifyText($data, $date_old));
+            $mailer->Send();
+        }
+    }
+
+    private function isNeedNotify($old_data, $new_data): bool
+    {
+        if (!empty($old_data->result) || !empty($new_data['result'])) return false;
+
+        $date_old = JDate::getInstance($old_data->date_task);
+        $date_new = JDate::getInstance($new_data['date_task']);
+        $date_old->setTime(0, 0, 0, 0);
+        $date_new->setTime(0, 0, 0, 0);
+
+        return ($date_new > $date_old);
+    }
+
+    private function getNewTaskNotifyText($data, $date_old): string
+    {
+        $manager = JFactory::getUser()->name;
+        $company = $this->getContract($data['contractID'])->company;
+        $task_link = $this->getTaskLink($data['id'], $company);
+
+        $date_old = JDate::getInstance($date_old);
+        $date_new = JDate::getInstance($data['date_task']);
+        $task_text = JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TASK_TEXT', $data['task']);
+
+        $text = "<p>" . JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TEXT', $manager, $task_link) . "</p><br>";
+        $text .= "<p>";
+        $text .= JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TEXT_OLD_DATE', $date_old->format("d.m.Y"));
+        $text .= "<br>";
+        $text .= JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TEXT_NEW_DATE', $date_new->format("d.m.Y"), $date_new->diff($date_old)->days);
+        $text .= "</p><br>";
+        $text .= "<p>{$task_text}</p>";
+
+        return $text;
+    }
+
+    private function getTaskLink(int $taskID, $company): string
+    {
+        $url = JRoute::_("index.php?option=com_scheduler&amp;task=task.edit&amp;id={$taskID}");
+        $url = "https://port.icecompany.org/{$url}";
+        return JHtml::link($url, JText::sprintf('COM_SCHEDULER_EMAIL_NEW_TASK_DATA_TASK_LINK_TEXT', $company));
+    }
+
+    private function isNotifyTaskDateEnabled(): bool
+    {
+        return (SchedulerHelper::getConfig('notify_new_task_date_enabled') == '1');
+    }
+
+    private function getNotifyUserGroup()
+    {
+        $group_id = SchedulerHelper::getConfig('notify_new_task_date_user_group');
+        if (!is_numeric($group_id)) return false;
+        return MkvHelper::getGroupUsers($group_id);
     }
 
     private function saveMeeting(array $data): bool
