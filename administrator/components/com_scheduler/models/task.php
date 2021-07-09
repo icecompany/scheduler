@@ -52,6 +52,7 @@ class SchedulerModelTask extends AdminModel {
 
         $data['date_task'] = JDate::getInstance($data['date_task'])->format("Y-m-d");
         if ($data['id'] !== null) {
+            $item = parent::getItem();
             if (!empty($data['result'])) {
                 $data['date_close'] = JDate::getInstance()->toSql();
                 $data['user_close'] = JFactory::getUser()->id;
@@ -109,9 +110,8 @@ class SchedulerModelTask extends AdminModel {
             $hst['section'] = 'task';
             $hst['new_data'] = json_encode($data);
             $hst['old_data'] = '';
-            if ($hst['action'] === 'update') {
-                $item = parent::getItem($data['id']);
-                $hst['old_data'] = json_encode($item);
+            if ($hst['action'] === 'update' && !empty($item)) {
+                $hst['old_data'] = json_encode($item ?? []);
             }
             JTable::addIncludePath(JPATH_ADMINISTRATOR . "/components/com_mkv/tables");
             $history = JTable::getInstance('History', 'TableMkv');
