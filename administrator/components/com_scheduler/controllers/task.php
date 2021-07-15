@@ -116,24 +116,45 @@ class SchedulerControllerTask extends FormController {
 
     public function gotoCompany()
     {
-        $referer = JUri::getInstance($_SERVER['HTTP_REFERER']);
-        $view = $referer->getVar('view');
-        $taskID = $referer->getVar('id');
+        $task = $this->getTaskFromReferer();
 
+        if ($this->referer->getVar('view') === 'task' && $task->id > 0)
+            $this->gotoMKVObject('company', $task->companyID);
+    }
+
+    public function gotoContract()
+    {
+        $task = $this->getTaskFromReferer();
+
+        if ($this->referer->getVar('view') === 'task' && $task->id > 0)
+            $this->gotoMKVObject('contract', $task->contractID_final);
+    }
+
+    private function gotoMKVObject(string $type, int $itemID = 0, string $return = '') {
+        $options = [
+            'contract' => 'com_contracts',
+            'company' => 'com_companies',
+            'task' => 'com_scheduler',
+        ];
+
+        $query = [
+            'option' => $options[$type],
+            'task' => $type . '.' . (($itemID > 0) ? 'edit' : 'add'),
+            'return' => (empty($return)) ? base64_encode($this->referer->toString()) : $return
+        ];
+
+        if ($itemID > 0) $query['id'] = $itemID;
+
+        $this->setRedirect("index.php?" . http_build_query($query));
+        $this->redirect();
+        jexit();
+    }
+
+    private function getTaskFromReferer()
+    {
+        $taskID = $this->referer->getVar('id');
         $model = $this->getModel();
-        $task = $model->getItem($taskID);
-
-        if ($view === 'task' && $taskID > 0) {
-            $query = [
-                'option' => 'com_companies',
-                'task' => 'company.edit',
-                'id' => $task->companyID,
-                'return' => base64_encode($referer->toString())
-            ];
-            $this->setRedirect("index.php?" . http_build_query($query));
-            $this->redirect();
-            jexit();
-        }
+        return $model->getItem($taskID);
     }
 
     public function getModel($name = 'Task', $prefix = 'SchedulerModel', $config = array('ignore_request' => true))
@@ -149,6 +170,9 @@ class SchedulerControllerTask extends FormController {
     public function __construct($config = array())
     {
         $this->registerTask('save2new', 'save');
+        $this->referer = JUri::getInstance($_SERVER['HTTP_REFERER']);
         parent::__construct($config);
     }
+
+    private $referer;
 }

@@ -25,6 +25,7 @@ class SchedulerModelTask extends AdminModel {
         else {
             $item->title = JText::sprintf('COM_SCHEDULER_TITLE_TASK_EDIT', $contract->company, $contract->project);
             $item->companyID = $contract->companyID;
+            $item->contractID_final = $item->contractID;
             //Подгружаем встречу
             $meeting = $this->loadMeeting($item->id);
             if (!empty($meeting->theme)) {

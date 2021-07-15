@@ -43,6 +43,7 @@ class SchedulerViewTask extends HtmlView {
         }
         if (is_numeric($this->item->id)) {
             JToolbarHelper::custom('task.gotoCompany', 'home', 'home', JText::sprintf('COM_MKV_BUTTON_GOTO_COMPANY'), false);
+            JToolbarHelper::custom('task.gotoContract', 'briefcase', 'briefcase', JText::sprintf('COM_MKV_BUTTON_GOTO_CONTRACT'), false);
         }
         JToolbarHelper::cancel('task.cancel', 'JTOOLBAR_CLOSE');
         JFactory::getApplication()->input->set('hidemainmenu', true);
