@@ -51,3 +51,15 @@ function fromTemplate(tip) {
     let field = document.getElementById("jform_template_"+tip);
     document.querySelector("#jform_"+tip).value = field.options[field.selectedIndex].getAttribute('data-text');
 }
+
+window.onload = function () {
+    //Сохранение активной вкладки на странице
+    jQuery('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        // save the latest tab; use cookies if you like 'em better:
+        localStorage.setItem('lastTab', jQuery(this).attr('href'));
+    });
+    var lastTab = localStorage.getItem('lastTab');
+    if (lastTab) {
+        jQuery('[href="' + lastTab + '"]').tab('show');
+    }
+};
