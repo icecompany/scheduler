@@ -114,6 +114,28 @@ class SchedulerControllerTask extends FormController {
         jexit();
     }
 
+    public function gotoCompany()
+    {
+        $referer = JUri::getInstance($_SERVER['HTTP_REFERER']);
+        $view = $referer->getVar('view');
+        $taskID = $referer->getVar('id');
+
+        $model = $this->getModel();
+        $task = $model->getItem($taskID);
+
+        if ($view === 'task' && $taskID > 0) {
+            $query = [
+                'option' => 'com_companies',
+                'task' => 'company.edit',
+                'id' => $task->companyID,
+                'return' => base64_encode($referer->toString())
+            ];
+            $this->setRedirect("index.php?" . http_build_query($query));
+            $this->redirect();
+            jexit();
+        }
+    }
+
     public function getModel($name = 'Task', $prefix = 'SchedulerModel', $config = array('ignore_request' => true))
     {
         return parent::getModel($name, $prefix, $config);
