@@ -33,6 +33,11 @@ HTMLHelper::_('script', 'com_scheduler/task.js', array('version' => 'auto', 'rel
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->item->id !== null): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'tasks', JText::sprintf('COM_SCHEDULER_TAB_OTHER_TASKS')); ?>
+                    <div><?php echo $this->loadTemplate('tasks'); ?></div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif; ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_MKV_LAYOUT_HISTORY')); ?>
                 <div class="row-fluid">
                     <div class="span12">

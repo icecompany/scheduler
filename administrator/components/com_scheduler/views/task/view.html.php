@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class SchedulerViewTask extends HtmlView {
-    protected $item, $form, $script, $contacts, $history, $version, $versionObject;
+    protected $item, $form, $script, $contacts, $history, $tasks, $version, $versionObject;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
@@ -13,6 +13,7 @@ class SchedulerViewTask extends HtmlView {
         $this->history = $this->get('History');
         $this->version = $this->get('Version');
         $this->versionObject = $this->get('VersionObject');
+        $this->tasks = $this->get('Tasks');
 
         if ($this->item->id !== null) {
             $this->form->removeField('template_task');

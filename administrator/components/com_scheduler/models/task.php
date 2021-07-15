@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\MVC\Model\ListModel;
 
 class SchedulerModelTask extends AdminModel {
     public function __construct($config = array())
@@ -268,6 +269,14 @@ class SchedulerModelTask extends AdminModel {
         $text .= "<p>{$task_text}</p>";
 
         return $text;
+    }
+
+    public function getTasks(): array
+    {
+        $item = parent::getItem();
+        if (!is_numeric($item->contractID)) return [];
+        $model = ListModel::getInstance('Tasks', 'SchedulerModel', ['contractID' => $item->contractID]);
+        return $model->getItems();
     }
 
     private function getTaskLink(int $taskID, $company): string
